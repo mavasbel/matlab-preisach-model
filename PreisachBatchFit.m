@@ -7,15 +7,15 @@ isBatch = true;
 % Paths to look for files
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 lookupPaths = [
-"G:\My Drive\MATLAB\Project\Hysteresis\Experimental Data\PNZT loops_dif_concentrations\PNZT_x0.47_mix";
-"G:\My Drive\MATLAB\Project\Hysteresis\Experimental Data\PNZT loops_dif_concentrations\PNZT_x0.48_mix";
-"G:\My Drive\MATLAB\Project\Hysteresis\Experimental Data\PNZT loops_dif_concentrations\PNZT_x0.465_mix";
-"G:\My Drive\MATLAB\Project\Hysteresis\Experimental Data\PNZT loops_dif_concentrations\PNZT_x0.475_mix";
-"G:\My Drive\MATLAB\Project\Hysteresis\Experimental Data\PNZT_loops_difGrainSize\VI";
-"G:\My Drive\MATLAB\Project\Hysteresis\Experimental Data\PNZT_loops_difGrainSize\VIII";
-"G:\My Drive\MATLAB\Project\Hysteresis\Experimental Data\PNZT_loops_difGrainSize\IX";
-"G:\My Drive\MATLAB\Project\Hysteresis\Experimental Data\PNZT_loops_difGrainSize\XIII";
-"G:\My Drive\MATLAB\Project\Hysteresis\Experimental Data\PNZT_loops_difGrainSize\XIV";
+"G:\My Drive\MATLAB\Project\Results\Experimental Data\PNZT loops_dif_concentrations\PNZT_x0.47_mix";
+"G:\My Drive\MATLAB\Project\Results\Experimental Data\PNZT loops_dif_concentrations\PNZT_x0.48_mix";
+"G:\My Drive\MATLAB\Project\Results\Experimental Data\PNZT loops_dif_concentrations\PNZT_x0.465_mix";
+"G:\My Drive\MATLAB\Project\Results\Experimental Data\PNZT loops_dif_concentrations\PNZT_x0.475_mix";
+"G:\My Drive\MATLAB\Project\Results\Experimental Data\PNZT_loops_difGrainSize\VI";
+"G:\My Drive\MATLAB\Project\Results\Experimental Data\PNZT_loops_difGrainSize\VIII";
+"G:\My Drive\MATLAB\Project\Results\Experimental Data\PNZT_loops_difGrainSize\IX";
+"G:\My Drive\MATLAB\Project\Results\Experimental Data\PNZT_loops_difGrainSize\XIII";
+"G:\My Drive\MATLAB\Project\Results\Experimental Data\PNZT_loops_difGrainSize\XIV";
 ];
 fitMatchFilter = '';
 skipFilter = '.*(uni).*';

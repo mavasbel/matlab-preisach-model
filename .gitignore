@@ -1,3 +1,4 @@
 slprj/
-simulation_grt_rtw/
-simulation_sfun.mexw64
+*_grt_rtw/
+*.autosave
+*.mexw64
