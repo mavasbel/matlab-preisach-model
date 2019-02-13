@@ -70,7 +70,7 @@ preisachPlots.plotSurfaceSubFig(preisachRelayModel.weightFunc, preisachRelayMode
 
 preisachPlots.plotSurfaceFig(preisachRelayModel.weightFunc, preisachRelayModel.xyGrid);
 
-run('./SimulinkParams');
+if (~exist('isBatch', 'var') || isBatch ~= true) run('./SimulinkParams'); end
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Functions

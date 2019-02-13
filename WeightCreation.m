@@ -4,8 +4,8 @@ clc
 
 inputMin = -1;
 inputMax = 1;
-gridDen = 200;
-sampleLength = 400;
+gridDen = 500;
+sampleLength = 800;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Create weighting function
@@ -18,6 +18,7 @@ y = linspace(inputMin, inputMax, gridDen);
 % Journal function:
 % z = (sin(2*pi*(gridY-gridX))) + (sin(2*pi*(gridX+gridY)));
 
+% Piecewise continuous symmetric weighting function
 z = zeros(gridDen, gridDen);
 for i=1:length(x)
     for j=1:length(y)
@@ -36,7 +37,6 @@ for i=1:length(x)
         end
     end
 end
-
 % surf(gridX, gridY, z, 'edgecolor', 'none');
 % colorbar
 % colormap jet
@@ -55,9 +55,13 @@ preisachRelayModel.printInfo();
 preisachUtils = PreisachRelayUtils(preisachRelayModel);
 
 inputSeq = [linspace(inputMin, inputMax, sampleLength), linspace(inputMax, inputMin, sampleLength)]';
-[outputSeq, relaysSeq] = preisachUtils.generateOutputSeq(inputSeq);
+outputSeq = preisachUtils.generateOutputSeq(inputSeq);
 dataHandler = DataHandler(inputSeq, outputSeq);
 % dataHandler = DataHandler(inputSeq, outputSeq+1.34/2);
+
+preisachRelayModel.offset = (dataHandler.outputMax-dataHandler.outputMin)/2;
+[outputSeq, relaysSeq] = preisachUtils.generateOutputSeq(inputSeq);
+dataHandler = DataHandler(inputSeq, outputSeq);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Plot loop
@@ -72,18 +76,26 @@ preisachPlots.plotSurfaceFig(preisachRelayModel.weightFunc, preisachRelayModel.x
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Add rectangles
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-linePoints = 350;
-maxZ = max(max(z));
+% linePoints = 350;
+% maxZ = max(max(z));
 
-inputCross= -0.5;
+% inputCross= -0.5;
 % inputCross= 0;
 % inputCross= 0.5;
-plotRectangle([inputMin, inputCross;
-    inputCross, inputCross;
-    inputCross, inputMax;
-    inputMin, inputMax;
-    inputMin, inputCross], maxZ, linePoints);
+% plotRectangle([inputMin, inputCross;
+%     inputCross, inputCross;
+%     inputCross, inputMax;
+%     inputMin, inputMax;
+%     inputMin, inputCross], maxZ, linePoints);
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Creating parameters for simulation
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+run('./SimulinkParams');
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Functions
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 function plotRectangle(vertix, maxZ, linePoints)
     for i=1:size(vertix,1)
         j = i+1;
