@@ -27,10 +27,10 @@ skipFilter = '.*(uni).*';
 % fitMatchFilter = 'PNZT_x0.475_.*difV.*1200V';
 % fitMatchFilter = 'PNZT_x0.475_.*x3.*1200V';
 % fitMatchFilter = 'PNZT_x0.47_.*difV.*1800V';
-% fitMatchFilter = 'PNZT_x0.47_.*x3.*1600V';
+fitMatchFilter = 'PNZT_x0.47_.*x3.*1400V';
 % fitMatchFilter = 'PNZT_x0.47_.*x3.*';
 % fitMatchFilter = 'PNZT_x0.465_.*difV.*1600V';
-fitMatchFilter = 'PNZT_x0.465_.*x3.*1400V';
+% fitMatchFilter = 'PNZT_x0.465_.*x3.*1400V';
 % fitMatchFilter = 'PNZT_x0.465_.*x3.*';
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
