@@ -13,13 +13,12 @@ classdef PreisachRelayModel < matlab.mixin.SetGet %handle
         
         weightFunc;
         offset;
-        
     end
 
     methods (Access = public)
         function obj = PreisachRelayModel(inputLims, gridDen, offset)
             obj.gridDen = gridDen;
-            obj.gridLength = (inputLims(2)- inputLims(1))/(obj.gridDen-1);
+            obj.gridLength = (inputLims(2)-inputLims(1))/(obj.gridDen-1);
             obj.gridArea = obj.gridLength^2;
             obj.xyGrid = linspace(inputLims(1), inputLims(2), obj.gridDen);
             
