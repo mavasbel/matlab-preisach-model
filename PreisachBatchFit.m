@@ -36,7 +36,7 @@ fitMatchFilter = 'PNZT_x0.47_.*x3.*1400V';
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Fitting
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-fitFileHandlers = DataLoader.getFileHandlers(lookupPaths, fitMatchFilter, skipFilter);
+fitFileHandlers = FileHandler.lookForFiles(lookupPaths, fitMatchFilter, skipFilter);
 for fhCount=1:length(fitFileHandlers)
     disp('---------------------------------------------------------------');
     fitFileHandlers(fhCount).printInfo();

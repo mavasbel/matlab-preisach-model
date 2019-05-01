@@ -7,7 +7,47 @@ classdef FileHandler < handle
 
         dataHandler
     end
+    
+    methods(Static)
+        
+        %Look for files in a given path and create a list of file handlers
+        %with all the matches
+        function fileHandlers = lookForFiles(lookupPaths, nameInclude, nameExclude)
+            fileHandlers = [];
+            for folderCounter=1:length(lookupPaths)
+                files = [
+                    dir(char(strcat(lookupPaths(folderCounter),'\*.csv')));
+                    dir(char(strcat(lookupPaths(folderCounter),'\*.dat')))
+                    ];
+                for fileCounter=1:length(files)
+                    fullFilePath = strcat(files(fileCounter).folder, '\', files(fileCounter).name);
+                    [filePath, fileName, ext] = fileparts(fullFilePath);
+
+                    if(nargin>=2 && exist('nameInclude', 'var') && ~isempty(nameInclude))
+                        index = regexp(fullFilePath, nameInclude, 'once');
+                        if( isempty(index) ) 
+                            continue
+                        end
+                    end
+
+                    if(nargin>=3 && exist('nameExclude', 'var') && ~isempty(nameExclude))
+                        index = regexp(fullFilePath, nameExclude, 'once');
+                        if( ~isempty(index) ) 
+                            continue
+                        end
+                    end
+
+                    fileHandlers = [fileHandlers; FileHandler(fullFilePath)];
+                 end
+            end
+        end
+        
+    end
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
     methods
+        
         function obj = FileHandler(fullFilePath)
             obj.fullFilePath = fullFilePath;
             [obj.filePath, obj.fileName, obj.ext] = fileparts(fullFilePath);
@@ -20,6 +60,7 @@ classdef FileHandler < handle
             disp(strcat('Ext: ', obj.ext))
         end
         
+        %Creates a data handler with the found file
         function dataHandler = getDataHandler(obj)
             if(~isempty(obj.dataHandler))
                 dataHandler = obj.dataHandler;
@@ -37,7 +78,10 @@ classdef FileHandler < handle
             dataHandler = obj.dataHandler;
         end
         
+    end
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        
+    methods (Access = private)
         
         function [header, matrix] = readCSV(obj)
             [~, ~, alldata] = xlsread(obj.fullFilePath);
@@ -61,8 +105,7 @@ classdef FileHandler < handle
                 header = string(data.colheaders);
                 matrix = double(data.data(:,:));
             else
-                %If data is not formatted
-                %Determine first row with data
+                %If data is not formatted determine first row with data
                 offset = -1;
                 k = 0;
                 while(offset == -1)
@@ -107,5 +150,7 @@ classdef FileHandler < handle
                 end
             end
         end
+        
     end
+    
 end

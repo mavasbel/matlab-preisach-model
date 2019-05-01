@@ -47,13 +47,9 @@ classdef DataHandler < matlab.mixin.SetGet %handle
             disp(['Adjusted data length: ', num2str(obj.sampleLength)]);
             if( ~isempty(obj.origTimeSeq) )
                 disp(['Original total time: ', num2str(obj.origTimeSeq(end) - obj.origTimeSeq(1))]);
-%                 disp(['Original initial time: ', num2str(obj.origTimeSeq(1))]);
-%                 disp(['Original final time: ', num2str(obj.origTimeSeq(end))]);
             end
             if( ~isempty(obj.timeSeq) )
                 disp(['Adjusted time interval: ', num2str(obj.timeSeq(end) - obj.timeSeq(1))]);
-%                 disp(['Adjusted initial time: ', num2str(obj.timeSeq(1))]);
-%                 disp(['Adjusted final time: ', num2str(obj.timeSeq(end))]);
             end
             disp(['Min input: ', num2str(obj.inputMin)]);
             disp(['Max input: ', num2str(obj.inputMax)]);
@@ -163,7 +159,6 @@ classdef DataHandler < matlab.mixin.SetGet %handle
                 end
             
             end
-            % startTrimIndex = cellfun(@(v)v(1),{find(interpInputSeq >= 650)});
     
             [inputSeq, outputSeq, indexesSeq] = obj.findSequenceParams();
         end

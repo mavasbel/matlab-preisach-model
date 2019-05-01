@@ -8,6 +8,11 @@ classdef PreisachRelayUtils < handle
             obj.preisachRelayModel = preisachRelayModel;
         end
         
+        %Applies and input to the Preisach operator and returns the
+        %corresponding output and relays sequence
+        %The filtereing operation means that if the
+        %exact same state of all relays in the Preisach plane is generated
+        %more than once, the corresponding output are averaged
         function [filteredInputSeq, filteredOutputSeq, filteredRelaysSeq] = filterSequences(obj, inputSeq, outputSeq)
             sampleLength = length(inputSeq);
             filteredOutputSeq = zeros(sampleLength,1);
@@ -40,36 +45,8 @@ classdef PreisachRelayUtils < handle
             filteredOutputSeq = filteredOutputSeq(1:hashCounter-1)./filteredOutputCounters;
         end
         
-        function [repeated, repeatedIndex, hash] = isRepeated(obj, matrix, matrixHashes, hashCounter)
-            repeatedIndex = 0;
-            repeated = false;
-            hash = obj.generateHash(matrix);
-            for i=[hashCounter, 1:hashCounter-1]
-                if( strcmp(hash,matrixHashes(i)) )
-                    repeatedIndex = i;
-                    repeated = true;
-                    break;
-                end
-            end
-        end
-        
-        function hash = generateHash(obj, matrix)
-            bytes = getByteStreamFromArray(matrix);
-            md = java.security.MessageDigest.getInstance('SHA-1');
-            md.update(bytes);
-            hash = char(reshape(dec2hex(typecast(md.digest(),'uint8'))',1,[]));
-        end
-        
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        
-        function relaysSeq = generateRelaysSeq(obj, inputSeq)
-            sampleLength = length(inputSeq);
-            relaysSeq = zeros(obj.preisachRelayModel.gridDen, obj.preisachRelayModel.gridDen, sampleLength);
-            for i=1:sampleLength
-                relaysSeq(:,:,i) = obj.preisachRelayModel.updateRelays(inputSeq(i));
-            end
-        end
-        
+        %Applies and input to the Preisach operator and returns the
+        %corresponding output and relays sequence
         function [outputSeq, relaysSeq] = generateOutputSeq(obj, inputSeq)
             sampleLength = size(inputSeq, 1);
             outputSeq = zeros(sampleLength,1);
@@ -80,52 +57,7 @@ classdef PreisachRelayUtils < handle
             end
         end
         
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-
-        function relaysMatrix = buildRelaysMatrix(obj, relaysSeq)
-            samplesLength = size(relaysSeq, 3);
-            relayIdx = 1;
-            relaysMatrix = zeros(samplesLength, obj.preisachRelayModel.totalRelays);
-            for i=1:obj.preisachRelayModel.gridDen
-                ii = obj.preisachRelayModel.gridDen-i+1; %index inversion for rows
-                for j=1:i
-                    relaysMatrix(:,relayIdx) = relaysSeq(ii,j,:);
-                    relayIdx = relayIdx + 1;
-                end
-            end
-        end
-        
-        function weightFunc = buildWeightPlane(obj, weightVector)
-            weightFunc = zeros(obj.preisachRelayModel.gridDen, obj.preisachRelayModel.gridDen);
-            vecIdx = 1;
-            for i=1:obj.preisachRelayModel.gridDen
-                ii = obj.preisachRelayModel.gridDen-i+1; %index inversion for rows
-                for j=1:i
-                    weightFunc(ii,j) = weightVector(vecIdx);
-                    vecIdx = vecIdx + 1;
-                end
-            end
-        end
-        
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        
-        function weightVector = svdApproxInverse(obj, P, filteredOutputSeq)
-            [U,S,V] = svd(P'*P);
-            weightVector = 0;
-            for i = 1:obj.preisachRelayModel.totalRelays
-                if S(i,i) > 10e-1
-                    weightVector = weightVector + U(:,i)'*(P'*filteredOutputSeq)./S(i,i)*V(:,i);
-                end
-            end
-        end
-        
-        function weightVector = fitWeights(obj, P, filteredOutputSeq)
-            gamma = 0.0;
-            % weightVector = ( P'*P + gamma*eye(size(P,2)) ) \ P'*filteredOutputSeq;
-            weightVector = P'*( (P*P' + gamma*eye(size(P,1)) ) \ filteredOutputSeq );
-            % weightVector = svdApproxInverse(P, filteredOutputSeq, gridDen);
-        end
-        
+        %Fits the weighting function to a given input and output
         function [filterTime, fittingTime, weightFuncTime] = fitModel(obj, inputSeq, outputSeq)
             % Generating filtered sequences
             filterTic = tic;
@@ -140,9 +72,6 @@ classdef PreisachRelayUtils < handle
             fittingTic = tic;
             weightVector = obj.fitWeights(P, filteredOutputSeq);
             fittingTime = toc(fittingTic);
-            
-%             weightVector = min(weightVector,0);
-%             weightVector = max(weightVector,0);
 
             % Building weight plane
             weightPlaneTic = tic;
@@ -151,35 +80,85 @@ classdef PreisachRelayUtils < handle
             weightFuncTime = toc(weightPlaneTic);
         end
         
-%         function [filterTime, fittingTime, weightFuncTime] = fitModel(obj, inputSeq, outputSeq)
-%             % Generating filtered sequences
-%             filterTic = tic;
-%             obj.preisachRelayModel.resetRelaysOff();
-%             [filteredInputSeq, filteredOutputSeq, filteredRelaysSeq] = ...
-%                 obj.filterSequences(inputSeq, outputSeq);
-%             
-%             matrix = obj.buildRelaysMatrix(filteredRelaysSeq)*obj.preisachRelayModel.gridArea;
-% %             P = [matrix,...
-% %                 [-ones(1,size(matrix,2)); matrix(1:end-1,:)],...
-% %                 ones(size(filteredRelaysSeq,3),1)];
-%             P = [matrix,...
-%                 filteredInputSeq,...
-%                 [max(filteredInputSeq); filteredInputSeq(1:end-1)],...
-%                 -[max(filteredOutputSeq); filteredOutputSeq(1:end-1)],...
-%                 ones(size(filteredRelaysSeq,3),1)];
-%             filterTime = toc(filterTic);
-% 
-%             % Computing weights
-%             fittingTic = tic;
-%             weightVector = obj.fitWeights(P, filteredOutputSeq);
-%             fittingTime = toc(fittingTic);
-% 
-%             % Building weight plane
-%             weightPlaneTic = tic;
-%             obj.preisachRelayModel.weightFunc = obj.buildWeightPlane(weightVector);
-%             obj.preisachRelayModel.offset = weightVector(end);
-%             weightFuncTime = toc(weightPlaneTic);
-%         end
+    end
+    
+    %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+    
+    methods (Access = private)
+        %Function to validate if a matrix is repeated using a list of the
+        %hashes of the matrices to compare
+        function [repeated, repeatedIndex, hash] = isRepeated(obj, matrix, matrixHashes, hashCounter)
+            repeatedIndex = 0;
+            repeated = false;
+            hash = obj.generateHash(matrix);
+            for i=[hashCounter, 1:hashCounter-1]
+                if( strcmp(hash,matrixHashes(i)) )
+                    repeatedIndex = i;
+                    repeated = true;
+                    break;
+                end
+            end
+        end
+        
+        %Generate the binary hash of a matrix
+        function hash = generateHash(obj, matrix)
+            bytes = getByteStreamFromArray(matrix);
+            md = java.security.MessageDigest.getInstance('SHA-1');
+            md.update(bytes);
+            hash = char(reshape(dec2hex(typecast(md.digest(),'uint8'))',1,[]));
+        end
+        
+        %Reshape a sequence of matrices that represent the state of the
+        %relays in the Preisach plane (the third dimension of the matrix is
+        %the time instant) to a single matrix whose rows are each time
+        %instant
+        function relaysMatrix = buildRelaysMatrix(obj, relaysSeq)
+            samplesLength = size(relaysSeq, 3);
+            relayIdx = 1;
+            relaysMatrix = zeros(samplesLength, obj.preisachRelayModel.totalRelays);
+            for i=1:obj.preisachRelayModel.gridDen
+                ii = obj.preisachRelayModel.gridDen-i+1; %index inversion for rows
+                for j=1:i
+                    relaysMatrix(:,relayIdx) = relaysSeq(ii,j,:);
+                    relayIdx = relayIdx + 1;
+                end
+            end
+        end
+        
+        %Reverses the operation of "buildRelaysMatrix" for a single row
+        %(the parameter weightVector) acomodating each element in the row
+        %to the corresponding position in the Preisach plane
+        function weightFunc = buildWeightPlane(obj, weightVector)
+            weightFunc = zeros(obj.preisachRelayModel.gridDen, obj.preisachRelayModel.gridDen);
+            vecIdx = 1;
+            for i=1:obj.preisachRelayModel.gridDen
+                ii = obj.preisachRelayModel.gridDen-i+1; %index inversion for rows
+                for j=1:i
+                    weightFunc(ii,j) = weightVector(vecIdx);
+                    vecIdx = vecIdx + 1;
+                end
+            end
+        end
+        
+        %Approximante inversion based on svd
+        function weightVector = svdApproxInverse(obj, P, filteredOutputSeq)
+            [U,S,V] = svd(P'*P);
+            weightVector = 0;
+            for i = 1:obj.preisachRelayModel.totalRelays
+                if S(i,i) > 10e-1
+                    weightVector = weightVector + U(:,i)'*(P'*filteredOutputSeq)./S(i,i)*V(:,i);
+                end
+            end
+        end
+        
+        %Computes the approximante inversion
+        function weightVector = fitWeights(obj, P, filteredOutputSeq)
+            gamma = 0.0;
+            % weightVector = ( P'*P + gamma*eye(size(P,2)) ) \ P'*filteredOutputSeq;
+            weightVector = P'*( (P*P' + gamma*eye(size(P,1)) ) \ filteredOutputSeq );
+            % weightVector = svdApproxInverse(P, filteredOutputSeq, gridDen);
+        end
+        
     end
     
 end
