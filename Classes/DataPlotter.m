@@ -1,18 +1,25 @@
-classdef DataPlotter
+classdef DataPlotter < handle
     properties
+        inputPeriodFig;
+        outputPeriodFig;
+        loopPeriodFig;
+        surfaceFig;
+        
         inputFig;
         outputFig;
         loopFig;
-        surfaceFig;
     end
         
     methods
-            function plotInputPeriod(obj, dataHandler)
-            if(isempty(obj.inputFig) || ~ishghandle(obj.inputFig))
-                obj.inputFig = figure; hold on; grid off;
-                fig = obj.inputFig;
+        
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        
+        function plotInputPeriod(obj, dataHandler)
+            if(isempty(obj.inputPeriodFig) || ~ishghandle(obj.inputPeriodFig))
+                obj.inputPeriodFig = figure; hold on; grid off;
+                fig = obj.inputPeriodFig;
             else
-                figure(obj.inputFig);
+                figure(obj.inputPeriodFig);
             end
             
             dataHandler.circShiftInputMinMax();
@@ -45,16 +52,16 @@ classdef DataPlotter
  
             axis([T1-T3*0.2,...
                 T3+T3*0.2,...
-                dataHandler.inputMin-0*dataHandler.inputAmp,...
+                dataHandler.inputMin-0.2*dataHandler.inputAmp,...
                 dataHandler.inputMax+0.2*dataHandler.inputAmp]);
         end
         
         function plotOutputPeriod(obj, dataHandler)
-            if(isempty(obj.outputFig) || ~ishghandle(obj.outputFig))
-                obj.outputFig = figure; hold on; grid off;
-                fig = obj.outputFig;
+            if(isempty(obj.outputPeriodFig) || ~ishghandle(obj.outputPeriodFig))
+                obj.outputPeriodFig = figure; hold on; grid off;
+                fig = obj.outputPeriodFig;
             else
-                figure(obj.outputFig);
+                figure(obj.outputPeriodFig);
             end
             
             dataHandler.circShiftInputMinMax();
@@ -91,11 +98,11 @@ classdef DataPlotter
         end
         
         function plotLoopPeriod(obj, dataHandler)
-            if(isempty(obj.loopFig) || ~ishghandle(obj.loopFig))
-                obj.loopFig = figure; hold on; grid off;
-                fig = obj.loopFig;
+            if(isempty(obj.loopPeriodFig) || ~ishghandle(obj.loopPeriodFig))
+                obj.loopPeriodFig = figure; hold on; grid off;
+                fig = obj.loopPeriodFig;
             else
-                figure(obj.loopFig);
+                figure(obj.loopPeriodFig);
             end
             
             dataHandler.circShiftInputMinMax();
@@ -133,6 +140,8 @@ classdef DataPlotter
                 dataHandler.outputMin-0.2*dataHandler.outputAmp,...
                 dataHandler.outputMax+0.2*dataHandler.outputAmp]);
         end
+        
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         
         function fig = plotWeightFunc(obj, weightFunc, xyGrid)  
             if(isempty(obj.surfaceFig) || ~ishghandle(obj.surfaceFig))
@@ -173,6 +182,95 @@ classdef DataPlotter
             view([0 90])
             
             axis square;
+        end
+        
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        
+        function plotInput(obj, dataHandler)
+            if(isempty(obj.inputFig) || ~ishghandle(obj.inputFig))
+                obj.inputFig = figure; hold on; grid off;
+                fig = obj.inputFig;
+            else
+                figure(obj.inputFig);
+            end
+
+            T1=1;
+            T2=dataHandler.sampleLength/2;
+            T3=dataHandler.sampleLength;
+            
+            plotHandler=plot(dataHandler.indexesSeq,dataHandler.inputSeq,'b');
+
+            lw=1.3;
+            set(plotHandler,'linewidth',lw);
+            set(plotHandler,'color',[0 0 0]);
+            set(plotHandler,'linestyle','-');
+
+            xlabel('t','fontsize',11);
+            ylabel('u(t)','fontsize',11,'Rotation',0,'Position',...
+                [-dataHandler.sampleLength*0.3 0 0]);
+            set(gca,'XTick',[],'XTickLabel',{},'fontsize',10);
+            set(gca,'YTick',[dataHandler.inputMin,dataHandler.inputMax],...
+                'YTickLabel',{'u_{min}','u_{max}'},'fontsize',10);
+ 
+            axis([-dataHandler.sampleLength*0.2,...
+                dataHandler.sampleLength*1.2,...
+                dataHandler.inputMin-0.2*dataHandler.inputAmp,...
+                dataHandler.inputMax+0.2*dataHandler.inputAmp]);
+        end
+        
+        function plotOutput(obj, dataHandler)
+            if(isempty(obj.outputFig) || ~ishghandle(obj.outputFig))
+                obj.outputFig = figure; hold on; grid off;
+                fig = obj.outputFig;
+            else
+                figure(obj.outputFig);
+            end
+            
+            plotHandler=plot(dataHandler.indexesSeq,dataHandler.outputSeq,'b');
+
+            lw=1.3;
+            set(plotHandler,'linewidth',lw);
+            set(plotHandler,'color',[0 0 0]);
+            set(plotHandler,'linestyle','-');
+
+            xlabel('t','fontsize',11);
+            ylabel('y(t)','fontsize',11,'Rotation',0,'Position',...
+                [-dataHandler.sampleLength*0.3 0 0]);
+            set(gca,'XTick',[],'XTickLabel',{},'fontsize',10);
+            set(gca,'YTick',[],'YTickLabel',{},'fontsize',10);
+            
+            axis([-dataHandler.sampleLength*0.2,...
+                dataHandler.sampleLength*1.2,...
+                dataHandler.outputMin-0.2*dataHandler.outputAmp,...
+                dataHandler.outputMax+0.2*dataHandler.outputAmp]);
+        end
+        
+        function plotLoop(obj, dataHandler)
+            if(isempty(obj.loopFig) || ~ishghandle(obj.loopFig))
+                obj.loopFig = figure; hold on; grid off;
+                fig = obj.loopFig;
+            else
+                figure(obj.loopFig);
+            end
+            
+            plotHandler=plot(dataHandler.inputSeq, dataHandler.outputSeq,'b');
+
+            lw=1.3;
+            set(plotHandler,'linewidth',lw);
+            set(plotHandler,'color',[0 0 0]);
+            set(plotHandler,'linestyle','-');
+            
+            xlabel('u(t)','fontsize',11);
+            ylabel('y(t)','fontsize',11,'Rotation',0,'Position',...
+                [(dataHandler.inputMin-0.375*dataHandler.inputAmp) 0 0]);
+            set(gca,'XTick',[dataHandler.inputMin,dataHandler.inputMax],...
+                'XTickLabel',{'u_{min}','u_{max}'},'fontsize',10);
+            set(gca,'YTick',[],'YTickLabel',{},'fontsize',10);
+            
+            axis([dataHandler.inputMin-0.2*dataHandler.inputAmp,...
+                dataHandler.inputMax+0.2*dataHandler.inputAmp,...
+                dataHandler.outputMin-0.2*dataHandler.outputAmp,...
+                dataHandler.outputMax+0.2*dataHandler.outputAmp]);
         end
         
     end

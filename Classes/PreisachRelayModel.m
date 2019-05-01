@@ -37,19 +37,6 @@ classdef PreisachRelayModel < matlab.mixin.SetGet %handle
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         
-        function relays = setRelaysWindowValue(obj, relayValue, lowerIdx, upperIdx, leftIdx, rightIdx)
-            for i=1:obj.gridDen
-                ii = obj.gridDen-i+1; %index inversion for rows
-                for j=1:i
-                    if( ( (i>=lowerIdx && i<=upperIdx) && ...
-                        ( (j>=leftIdx && j<=rightIdx)  ) ) )
-                        obj.relays(ii,j) = relayValue;
-                    end
-                end
-            end
-            relays = obj.relays;
-        end
-        
         function relays = resetRelaysOff(obj)
             obj.relays = obj.hysteronMin*fliplr(triu(ones(obj.gridDen, obj.gridDen)));
             relays = obj.relays;
@@ -58,6 +45,42 @@ classdef PreisachRelayModel < matlab.mixin.SetGet %handle
         function relays = resetRelaysOn(obj)
             obj.relays = obj.hysteronMax*fliplr(triu(ones(obj.gridDen, obj.gridDen)));
             relays = obj.relays;
+        end
+        
+        function relays = setRelaysWindow(obj,...
+                leftIdx, rightIdx,...
+                lowerIdx, upperIdx,...
+                relayState)
+            
+            for i=1:obj.gridDen
+                ii = obj.gridDen-i+1; %index inversion for rows
+                for j=1:i
+                    if( ( (i>=lowerIdx && i<=upperIdx) && ...
+                        ( (j>=leftIdx && j<=rightIdx)  ) ) )
+                        obj.relays(ii,j) = relayState;
+                    end
+                end
+            end
+            relays = obj.relays;
+        end
+        
+        function relays = setRelaysWindowByValue(obj,...
+                leftVal, rightVal,...
+                lowerVal, upperVal,...
+                relayState)
+            leftVal = min([max([leftVal, obj.xyGrid(1)]), obj.xyGrid(end)]);
+            rightVal = min([max([rightVal, obj.xyGrid(1)]), obj.xyGrid(end)]);
+            lowerVal = min([max([lowerVal, obj.xyGrid(1)]), obj.xyGrid(end)]);
+            upperVal = min([max([upperVal, obj.xyGrid(1)]), obj.xyGrid(end)]);
+            
+            leftIdx = cellfun(@(v)v(1),{find(obj.xyGrid >= leftVal)});
+            rightIdx = cellfun(@(v)v(1),{find(obj.xyGrid >= rightVal)});
+            lowerIdx = cellfun(@(v)v(1),{find(obj.xyGrid >= lowerVal)});
+            upperIdx = cellfun(@(v)v(1),{find(obj.xyGrid >= upperVal)});
+            
+            relays = obj.setRelaysWindow(leftIdx, rightIdx,...
+                lowerIdx, upperIdx,...
+                relayState);
         end
         
         function relays = setRelaysOnLessThanInput(obj, inputVal)
