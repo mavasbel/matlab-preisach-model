@@ -14,6 +14,9 @@ classdef PreisachRelayUtils < handle
         %exact same state of all relays in the Preisach plane is generated
         %more than once, the corresponding output are averaged
         function [filteredInputSeq, filteredOutputSeq, filteredRelaysSeq] = filterSequences(obj, inputSeq, outputSeq)
+            inputSeq = inputSeq(:);
+            outputSeq = outputSeq(:);
+            
             sampleLength = length(inputSeq);
             filteredOutputSeq = zeros(sampleLength,1);
             filteredOutputCounters = ones(sampleLength,1);
@@ -48,6 +51,8 @@ classdef PreisachRelayUtils < handle
         %Applies and input to the Preisach operator and returns the
         %corresponding output and relays sequence
         function [outputSeq, relaysSeq] = generateOutputSeq(obj, inputSeq)
+            inputSeq = inputSeq(:);
+            
             sampleLength = size(inputSeq, 1);
             outputSeq = zeros(sampleLength,1);
             relaysSeq = zeros(obj.preisachRelayModel.gridDen, obj.preisachRelayModel.gridDen, sampleLength);
@@ -59,6 +64,9 @@ classdef PreisachRelayUtils < handle
         
         %Fits the weighting function to a given input and output
         function [filterTime, fittingTime, weightFuncTime] = fitModel(obj, inputSeq, outputSeq)
+            inputSeq = inputSeq(:);
+            outputSeq = outputSeq(:);
+            
             % Generating filtered sequences
             filterTic = tic;
             obj.preisachRelayModel.resetRelaysOff();

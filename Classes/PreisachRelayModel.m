@@ -14,11 +14,10 @@ classdef PreisachRelayModel < matlab.mixin.SetGet %handle
         weightFunc;
         offset;
         
-        lastInputPair;
     end
 
     methods (Access = public)
-        function obj = PreisachRelayModel(inputLims, gridDen)
+        function obj = PreisachRelayModel(inputLims, gridDen, offset)
             obj.gridDen = gridDen;
             obj.gridLength = (inputLims(2)- inputLims(1))/(obj.gridDen-1);
             obj.gridArea = obj.gridLength^2;
@@ -26,7 +25,8 @@ classdef PreisachRelayModel < matlab.mixin.SetGet %handle
             
             obj.totalRelays = obj.gridDen*(obj.gridDen+1)/2;
             obj.relays = obj.hysteronMin*fliplr(triu(ones(obj.gridDen, obj.gridDen)));
-            obj.lastInputPair = [0, 0];
+            
+            obj.offset = 0;
         end
         
         function printInfo(obj)
@@ -52,19 +52,16 @@ classdef PreisachRelayModel < matlab.mixin.SetGet %handle
         end
         
         function relays = resetRelaysOff(obj)
-            obj.lastInputPair = [0, 0];
             obj.relays = obj.hysteronMin*fliplr(triu(ones(obj.gridDen, obj.gridDen)));
             relays = obj.relays;
         end
         
         function relays = resetRelaysOn(obj)
-            obj.lastInputPair = [0, 0];
             obj.relays = obj.hysteronMax*fliplr(triu(ones(obj.gridDen, obj.gridDen)));
             relays = obj.relays;
         end
         
         function relays = setRelaysOnLessThanInput(obj, inputVal)
-            obj.lastInputPair = [inputVal, inputVal];
             rightIdx = cellfun(@(v)v(1),{find(obj.xyGrid >= inputVal)});
             leftIdx = 1;
             upperIdx = obj.gridDen;
@@ -74,8 +71,6 @@ classdef PreisachRelayModel < matlab.mixin.SetGet %handle
         end
         
         function relays = setRelaysUpperLeftCorner(obj, inputVal)
-            obj.lastInputPair = [inputVal, inputVal];
-            
             leftIdx = 1;
             rightIdx = cellfun(@(v)v(1),{find(obj.xyGrid >= inputVal)});
             upperIdx = obj.gridDen;
@@ -87,7 +82,6 @@ classdef PreisachRelayModel < matlab.mixin.SetGet %handle
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         
         function relays = updateRelays(obj, input)
-%             obj.lastInputPair = [obj.lastInputPair(2), input];
 %             for i=1:obj.gridDen
 %                 ii = obj.gridDen-i+1; %index inversion for rows
 %                 for j=1:i

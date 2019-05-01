@@ -8,13 +8,19 @@ classdef DataHandler < matlab.mixin.SetGet %handle
         sampleLength
         inputSeq
         outputSeq
-        indexesSeq
         timeSeq
+        indexesSeq
+        
         inputMin
         inputMax
+        inputAmp
+        inputOffset
+
         outputMin
         outputMax
-        initialInput
+        outputAmp
+        outputOffset
+        
         maxInputPeakIdx
         minInputPeakIdx
         maxOutputPeakIdx
@@ -27,6 +33,10 @@ classdef DataHandler < matlab.mixin.SetGet %handle
         function obj = DataHandler(origInputSeq, origOutputSeq, origTimeSeq)
             obj.origInputSeq = origInputSeq(:);
             obj.origOutputSeq = origOutputSeq(:);
+            if(length(obj.origInputSeq)~=length(obj.origOutputSeq))
+                error('Input and output have different dimension')
+            end
+            
             obj.origSampleLength = length(origInputSeq);
             
             obj.inputSeq = origInputSeq(:);
@@ -35,6 +45,9 @@ classdef DataHandler < matlab.mixin.SetGet %handle
             
             if(nargin>2 && exist('origTimeSeq', 'var'))
                 obj.origTimeSeq = origTimeSeq(:);
+                if(obj.origSampleLength~=length(obj.origTimeSeq))
+                    error('Time dimension does not agree')
+                end
                 obj.timeSeq = obj.origTimeSeq(:);
             end
             
@@ -64,9 +77,13 @@ classdef DataHandler < matlab.mixin.SetGet %handle
             
             obj.inputMin = min(obj.inputSeq);
             obj.inputMax = max(obj.inputSeq);
+            obj.inputAmp = (obj.inputMax - obj.inputMin)/2;
+            obj.inputOffset = (obj.inputMax + obj.inputMin)/2;
+            
             obj.outputMin = min(obj.outputSeq);
             obj.outputMax = max(obj.outputSeq);
-            obj.initialInput = obj.inputSeq(1);
+            obj.outputAmp = (obj.outputMax - obj.outputMin)/2;
+            obj.outputOffset = (obj.outputMax + obj.outputMin)/2;
             
             [~,obj.maxInputPeakIdx] = findpeaks(obj.inputSeq);
             [~,obj.minInputPeakIdx] = findpeaks(-obj.inputSeq);
@@ -75,10 +92,11 @@ classdef DataHandler < matlab.mixin.SetGet %handle
             obj.zeroCrossInputIdx = cell2mat(cellfun(@(v){find(v(:).*circshift(v(:), [-1 0]) <= 0)},{obj.inputSeq}));
             obj.zeroCrossOutputIdx = cell2mat(cellfun(@(v){find(v(:).*circshift(v(:), [-1 0]) <= 0)},{obj.outputSeq}));
             
-            obj.maxInputPeakIdx(cellfun('isempty',{obj.maxInputPeakIdx})) = 0;
-            obj.minInputPeakIdx(cellfun('isempty',{obj.minInputPeakIdx})) = 0;
-            obj.maxOutputPeakIdx(cellfun('isempty',{obj.maxOutputPeakIdx})) = 0;
-            obj.minOutputPeakIdx(cellfun('isempty',{obj.minOutputPeakIdx})) = 0;
+            %Index zero if peaks are not found
+            %obj.maxInputPeakIdx(cellfun('isempty',{obj.maxInputPeakIdx})) = 0;
+            %obj.minInputPeakIdx(cellfun('isempty',{obj.minInputPeakIdx})) = 0;
+            %obj.maxOutputPeakIdx(cellfun('isempty',{obj.maxOutputPeakIdx})) = 0;
+            %obj.minOutputPeakIdx(cellfun('isempty',{obj.minOutputPeakIdx})) = 0;
             
             inputSeq = obj.inputSeq;
             outputSeq = obj.outputSeq;
@@ -96,106 +114,6 @@ classdef DataHandler < matlab.mixin.SetGet %handle
             end
             
             obj.findSequenceParams();
-        end
-        
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        
-        function [inputSeq, outputSeq, indexesSeq] = circShiftInputMinMax(obj)
-            obj.inputSeq = circshift(obj.inputSeq, obj.minInputPeakIdx(1));
-            obj.outputSeq = circshift(obj.outputSeq, obj.minInputPeakIdx(1));
-            
-            [inputSeq, outputSeq, indexesSeq] = obj.findSequenceParams();
-        end
-        
-        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-        
-        function [inputSeq, outputSeq, indexesSeq] = trimFirstSecondMaxInput(obj)
-            if(length(obj.maxInputPeakIdx)==3)
-                startTrimIdx = obj.maxInputPeakIdx(1); 
-                endTrimIdx = obj.maxInputPeakIdx(2); 
-                
-                obj.indexesSeq = (startTrimIdx:endTrimIdx)';
-                obj.inputSeq = obj.origInputSeq(obj.indexesSeq);
-                obj.outputSeq = obj.origOutputSeq(obj.indexesSeq);
-                
-                if( ~isempty(obj.timeSeq) )
-                    obj.timeSeq = obj.timeSeq(obj.indexesSeq);
-                end
-                
-            end
-    
-            [inputSeq, outputSeq, indexesSeq] = obj.findSequenceParams();
-        end
-        
-        function [inputSeq, outputSeq, indexesSeq] = trimSecondThirdMaxInput(obj)
-            if(length(obj.maxInputPeakIdx)==3)
-                startTrimIdx = obj.maxInputPeakIdx(2); 
-                endTrimIdx = obj.maxInputPeakIdx(3); 
-                
-                obj.indexesSeq = (startTrimIdx:endTrimIdx)';
-                obj.inputSeq = obj.origInputSeq(obj.indexesSeq);
-                obj.outputSeq = obj.origOutputSeq(obj.indexesSeq);
-                
-                if( ~isempty(obj.timeSeq) )
-                    obj.timeSeq = obj.timeSeq(obj.indexesSeq);
-                end
-                
-            end
-    
-            [inputSeq, outputSeq, indexesSeq] = obj.findSequenceParams();
-        end
-        
-        function [inputSeq, outputSeq, indexesSeq] = trimFirstMaxLastMinInput(obj)
-            if(length(obj.minInputPeakIdx)==3)
-                startTrimIdx = obj.maxInputPeakIdx(1); 
-                endTrimIdx = obj.minInputPeakIdx(3);
-                
-                obj.indexesSeq = (startTrimIdx:endTrimIdx)';
-                obj.inputSeq = obj.origInputSeq(obj.indexesSeq);
-                obj.outputSeq = obj.origOutputSeq(obj.indexesSeq);
-                
-                if( ~isempty(obj.timeSeq) )
-                    obj.timeSeq = obj.timeSeq(obj.indexesSeq);
-                end
-            
-            end
-    
-            [inputSeq, outputSeq, indexesSeq] = obj.findSequenceParams();
-        end
-
-        function [inputSeq, outputSeq, indexesSeq] = trimSecondMaxLastMinInput(obj)
-            if(length(obj.minInputPeakIdx)==3)
-                startTrimIdx = obj.maxInputPeakIdx(2); 
-                endTrimIdx = obj.minInputPeakIdx(3);
-                
-                obj.indexesSeq = (startTrimIdx:endTrimIdx)';
-                obj.inputSeq = obj.origInputSeq(obj.indexesSeq);
-                obj.outputSeq = obj.origOutputSeq(obj.indexesSeq);
-                
-                if( ~isempty(obj.timeSeq) )
-                    obj.timeSeq = obj.timeSeq(obj.indexesSeq);
-                end
-                
-            end
-    
-            [inputSeq, outputSeq, indexesSeq] = obj.findSequenceParams();
-        end
-        
-        function [inputSeq, outputSeq, indexesSeq] = trimFirstZeroCrossInput(obj)
-            if(length(obj.maxInputPeakIdx)==3)
-                startTrimIdx = obj.zeroCrossInputIdx(2)+1; 
-                endTrimIdx = obj.sampleLength; 
-                
-                obj.indexesSeq = (startTrimIdx:endTrimIdx)';
-                obj.inputSeq = obj.origInputSeq(obj.indexesSeq);
-                obj.outputSeq = obj.origOutputSeq(obj.indexesSeq);
-                
-                if( ~isempty(obj.timeSeq) )
-                    obj.timeSeq = obj.timeSeq(obj.indexesSeq);
-                end
-            end
-    
-            [inputSeq, outputSeq, indexesSeq] = obj.findSequenceParams();
         end
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -220,11 +138,102 @@ classdef DataHandler < matlab.mixin.SetGet %handle
             obj.indexesSeq = interp1(obj.indexesSeq, interpIdx, 'linear');
             obj.inputSeq = interp1(obj.inputSeq, interpIdx, 'linear');
             obj.outputSeq = interp1(obj.outputSeq, interpIdx, 'pchip');
-            
             if( ~isempty(obj.timeSeq) )
                 obj.timeSeq = interp1(obj.timeSeq, interpIdx, 'linear');
             end
             
+            [inputSeq, outputSeq, indexesSeq] = obj.findSequenceParams();
+        end
+        
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        
+        function [inputSeq, outputSeq, indexesSeq] = trimFirstSecondMaxInput(obj)
+            if(length(obj.maxInputPeakIdx)==3)
+                startTrimIdx = obj.maxInputPeakIdx(1); 
+                endTrimIdx = obj.maxInputPeakIdx(2); 
+                
+                obj.indexesSeq = (startTrimIdx:endTrimIdx)';
+                obj.inputSeq = obj.origInputSeq(obj.indexesSeq);
+                obj.outputSeq = obj.origOutputSeq(obj.indexesSeq);
+                if( ~isempty(obj.timeSeq) )
+                    obj.timeSeq = obj.timeSeq(obj.indexesSeq);
+                end
+            end
+    
+            [inputSeq, outputSeq, indexesSeq] = obj.findSequenceParams();
+        end
+        
+        function [inputSeq, outputSeq, indexesSeq] = trimSecondThirdMaxInput(obj)
+            if(length(obj.maxInputPeakIdx)==3)
+                startTrimIdx = obj.maxInputPeakIdx(2); 
+                endTrimIdx = obj.maxInputPeakIdx(3); 
+                
+                obj.indexesSeq = (startTrimIdx:endTrimIdx)';
+                obj.inputSeq = obj.origInputSeq(obj.indexesSeq);
+                obj.outputSeq = obj.origOutputSeq(obj.indexesSeq);
+                if( ~isempty(obj.timeSeq) )
+                    obj.timeSeq = obj.timeSeq(obj.indexesSeq);
+                end 
+            end
+    
+            [inputSeq, outputSeq, indexesSeq] = obj.findSequenceParams();
+        end
+        
+        function [inputSeq, outputSeq, indexesSeq] = trimFirstMaxLastMinInput(obj)
+            if(length(obj.minInputPeakIdx)==3)
+                startTrimIdx = obj.maxInputPeakIdx(1); 
+                endTrimIdx = obj.minInputPeakIdx(3);
+                
+                obj.indexesSeq = (startTrimIdx:endTrimIdx)';
+                obj.inputSeq = obj.origInputSeq(obj.indexesSeq);
+                obj.outputSeq = obj.origOutputSeq(obj.indexesSeq);
+                if( ~isempty(obj.timeSeq) )
+                    obj.timeSeq = obj.timeSeq(obj.indexesSeq);
+                end
+            end
+    
+            [inputSeq, outputSeq, indexesSeq] = obj.findSequenceParams();
+        end
+
+        function [inputSeq, outputSeq, indexesSeq] = trimSecondMaxLastMinInput(obj)
+            if(length(obj.minInputPeakIdx)==3)
+                startTrimIdx = obj.maxInputPeakIdx(2); 
+                endTrimIdx = obj.minInputPeakIdx(3);
+                
+                obj.indexesSeq = (startTrimIdx:endTrimIdx)';
+                obj.inputSeq = obj.origInputSeq(obj.indexesSeq);
+                obj.outputSeq = obj.origOutputSeq(obj.indexesSeq);
+                if( ~isempty(obj.timeSeq) )
+                    obj.timeSeq = obj.timeSeq(obj.indexesSeq);
+                end
+            end
+    
+            [inputSeq, outputSeq, indexesSeq] = obj.findSequenceParams();
+        end
+        
+        function [inputSeq, outputSeq, indexesSeq] = trimFirstZeroCrossInput(obj)
+            if(length(obj.maxInputPeakIdx)==3)
+                startTrimIdx = obj.zeroCrossInputIdx(2)+1; 
+                endTrimIdx = obj.sampleLength; 
+                
+                obj.indexesSeq = (startTrimIdx:endTrimIdx)';
+                obj.inputSeq = obj.origInputSeq(obj.indexesSeq);
+                obj.outputSeq = obj.origOutputSeq(obj.indexesSeq);
+                if( ~isempty(obj.timeSeq) )
+                    obj.timeSeq = obj.timeSeq(obj.indexesSeq);
+                end
+            end
+    
+            [inputSeq, outputSeq, indexesSeq] = obj.findSequenceParams();
+        end
+        
+        %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+        
+        function [inputSeq, outputSeq, indexesSeq] = circShiftInputMinMax(obj)
+            if(~isempty(obj.minInputPeakIdx))
+                obj.inputSeq = circshift(obj.inputSeq, -obj.minInputPeakIdx(1));
+                obj.outputSeq = circshift(obj.outputSeq, -obj.minInputPeakIdx(1));
+            end
             [inputSeq, outputSeq, indexesSeq] = obj.findSequenceParams();
         end
         
@@ -237,7 +246,6 @@ classdef DataHandler < matlab.mixin.SetGet %handle
                 obj.indexesSeq = [obj.indexesSeq;...
                     obj.indexesSeq + 1*obj.indexesSeq(end);...
                     obj.indexesSeq + 2*obj.indexesSeq(end);];
-                
                 if( ~isempty(obj.timeSeq) )
                     obj.timeSeq = [obj.timeSeq;...
                         obj.timeSeq + 1*obj.timeSeq(end);...

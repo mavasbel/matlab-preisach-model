@@ -18,7 +18,7 @@ outputMax = dataHandler.outputMax;
 inputFactor = 1.5;
 outputFactor = 1.5;
 simTotalTime = 300;
-initialInput = -0.5*(inputMax-inputMin)/2 + (inputMax+inputMin)/2;
+initialInput = -0.5*dataHandler.inputAmp + dataHandler.inputOffset;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Time steps

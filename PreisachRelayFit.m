@@ -12,13 +12,6 @@ dataHandler.trimSecondThirdMaxInput();
 dataHandler.interpSequence(401*4);
 dataHandler.printInfo();
 
-% dataHandler.outputSeq = wrev(dataHandler.outputSeq);
-% dataHandler.inputSeq = wrev(dataHandler.inputSeq);
-% dataHandler.normalizeInput();
-% dataHandler.normalizeOutput();
-% dataHandler = DataHandler(dataHandler.outputSeq, dataHandler.inputSeq, dataHandler.timeSeq);
-% dataHandler.printInfo();
-
 inputInterFact = -0.005;
 inputInter = abs(dataHandler.inputMax - dataHandler.inputMin);
 preisachRelayModel = PreisachRelayModel([dataHandler.inputMin-inputInter*inputInterFact, ...
@@ -44,14 +37,6 @@ preisachUtils = PreisachRelayUtils(preisachRelayModel);
 % Generating fitted output
 fittedOutputTic = tic;
 preisachRelayModel.resetRelaysOff();
-
-% dataHandler.inputSeq = 0.5*(dataHandler.inputSeq - dataHandler.inputMin) + dataHandler.inputMin;
-% % dataHandler.inputSeq = dataHandler.inputSeq-(1/2)*(dataHandler.inputMax-dataHandler.inputMin);
-% dataHandler.inputSeq = [dataHandler.inputSeq(:); dataHandler.inputSeq(:)];
-% dataHandler.outputSeq = [dataHandler.outputSeq(:); dataHandler.outputSeq(:)];
-% dataHandler.indexesSeq = [dataHandler.indexesSeq(:); dataHandler.indexesSeq(end) + 1 + dataHandler.indexesSeq(:)];
-% preisachPlots.plotInputSubFig(dataHandler.indexesSeq, dataHandler.inputSeq, 'Readjusted Input', 'g');
-
 [fittedOutputSeq, fittedRelaysSeq] = preisachUtils.generateOutputSeq(dataHandler.inputSeq);
 fittedOutputTime = toc(fittedOutputTic);
 
@@ -63,7 +48,6 @@ printFittingInfo(dataHandler, fittedOutputSeq(:), filterTime, fittingTime, weigh
 
 % Add fitted curve and weight plane
 preisachPlots.plotOutputSubFig(dataHandler.indexesSeq, fittedOutputSeq, 'Fitted Output', 'k');
-% preisachPlots.plotLoopSubFig(dataHandler.origInputSeq, dataHandler.origOutputSeq, 'Real data', 'r');
 preisachPlots.plotLoopSubFig(dataHandler.inputSeq, dataHandler.outputSeq, 'Real data', 'r');
 preisachPlots.plotLoopSubFig(dataHandler.inputSeq, fittedOutputSeq, 'Fitted result', 'b');
 preisachPlots.plotSurfaceSubFig(preisachRelayModel.weightFunc, preisachRelayModel.xyGrid);
