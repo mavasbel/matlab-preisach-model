@@ -46,7 +46,8 @@ classdef DataPlotter < handle
             legend('u(t) | T_1 \leq t < T_2','u(t) | T_2 \leq t < T_3');
             xlabel('t','fontsize',11);
             ylabel('u(t)','fontsize',11,'Rotation',0,'Position',[-T3*0.30 0 0]);
-            set(gca,'XTick',[T1,T2,T3],'XTickLabel',{'T_1','T_2','T_1 + T'},'fontsize',10);
+            set(gca,'XTick',[T1,T2,T3],...
+                'XTickLabel',{'T_1','T_2','T_1 + T'},'fontsize',10);
             set(gca,'YTick',[dataHandler.inputMin,dataHandler.inputMax],...
                 'YTickLabel',{'u_{min}','u_{max}'},'fontsize',10);
  
@@ -88,7 +89,8 @@ classdef DataPlotter < handle
             legend('\Phi(t) | T_1 \leq t < T_2','\Phi(t) | T_2 \leq t < T_3');
             xlabel('t','fontsize',11);
             ylabel('\Phi(t)','fontsize',11,'Rotation',0,'Position',[-T3*0.30 0 0]);
-            set(gca,'XTick',[T1,T2,T3],'XTickLabel',{'T_1','T_2','T_1 + T'},'fontsize',10);
+            set(gca,'XTick',[T1,T2,T3],...
+                'XTickLabel',{'T_1','T_2','T_1 + T'},'fontsize',10);
             set(gca,'YTick',[],'YTickLabel',{},'fontsize',10);
             
             axis([T1-T3*0.2,...

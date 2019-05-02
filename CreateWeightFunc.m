@@ -54,7 +54,7 @@ preisachUtils = PreisachRelayUtils(preisachRelayModel);
 %offset generates the major loop again
 inputSeq = [linspace(inputMin, inputMax, sampleLength), ...
     linspace(inputMax, inputMin, sampleLength)]';
-outputSeq = preisachUtils.generateOutputSeq(inputSeq);
+[outputSeq, ~] = preisachUtils.generateOutputSeq(inputSeq);
 dataHandler = DataHandler(inputSeq, outputSeq);
 preisachRelayModel.offset = -dataHandler.outputOffset;
 [outputSeq, relaysSeq] = preisachUtils.generateOutputSeq(inputSeq);
