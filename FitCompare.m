@@ -7,10 +7,10 @@ isBatch = true;
 % Paths to look for files
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 lookupPaths = [
-"G:\My Drive\MATLAB\Project\Hysteresis\Experimental Data\PNZT loops_dif_concentrations\PNZT_x0.47_mix";
-"G:\My Drive\MATLAB\Project\Hysteresis\Experimental Data\PNZT loops_dif_concentrations\PNZT_x0.48_mix";
-"G:\My Drive\MATLAB\Project\Hysteresis\Experimental Data\PNZT loops_dif_concentrations\PNZT_x0.465_mix";
-"G:\My Drive\MATLAB\Project\Hysteresis\Experimental Data\PNZT loops_dif_concentrations\PNZT_x0.475_mix";
+"G:\My Drive\MATLAB\PhD\Results\Experimental Data\PNZT loops_dif_concentrations\PNZT_x0.47_mix";
+"G:\My Drive\MATLAB\PhD\Results\Experimental Data\PNZT loops_dif_concentrations\PNZT_x0.48_mix";
+"G:\My Drive\MATLAB\PhD\Results\Experimental Data\PNZT loops_dif_concentrations\PNZT_x0.465_mix";
+"G:\My Drive\MATLAB\PhD\Results\Experimental Data\PNZT loops_dif_concentrations\PNZT_x0.475_mix";
 ];
 fitMatchFilter = '';
 compMatchFilter = '';
@@ -36,7 +36,7 @@ compMatchFilter = 'PNZT_x0.47_.*(x3).*';
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Fitting data handler and model
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-fitFileHandlers = DataLoader.getFileHandlers(lookupPaths, fitMatchFilter, skipFilter);
+fitFileHandlers = FileHandler.lookForFiles(lookupPaths, fitMatchFilter, skipFilter);
 fitFileHandlers(1).printInfo();
 dataHandler = fitFileHandlers(1).getDataHandler();
 
@@ -54,14 +54,14 @@ dataHandler = fitFileHandlers(1).getDataHandler();
 %     fitFileHandlers(2).getDataHandler().outputSeq;
 %     fitFileHandlers(1).getDataHandler().outputSeq;]);
 
-run('./PreisachRelayFit');
+run('./FitModel.m');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Comparing
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 allRealPlots = PreisachPlots();
 allModelPlots = PreisachPlots();
-compFileHandlers = DataLoader.getFileHandlers(lookupPaths, compMatchFilter, skipFilter);
+compFileHandlers = FileHandler.lookForFiles(lookupPaths, compMatchFilter, skipFilter);
 for i=1:length(compFileHandlers) 
     disp('---------------------------------------------------------------');
     compFileHandlers(i).printInfo();
