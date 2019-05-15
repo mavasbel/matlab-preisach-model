@@ -6,9 +6,9 @@ clc
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 inputMin = -1;
 inputMax = 1;
-totalTime = 15;
-timeStep = 0.01;
-inputFreq = 10/10;
+totalTime = 3;
+timeStep = 0.001;
+inputFreq = 5;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Creates input sequence
@@ -24,8 +24,8 @@ inputSeq = inputAmp*sin(2*pi*inputFreq*timeSeq) + inputOffset;
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % num = [0,4];
 % den = [1,4];
-num = [0,0,9];
-den = [1,6,9];
+num = [0,0,1000];
+den = [1,32,1000];
 ltiSys = tf(num,den);
 [outputSeq, timeSeq, stateSeq] = lsim(ltiSys, inputSeq, timeSeq);
 dataHandler = DataHandler(inputSeq, outputSeq, timeSeq);

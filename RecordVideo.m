@@ -7,15 +7,18 @@ videoName = 'video.avi';
 %     num2str(inputFreq,'%.1f'),...
 %     'hz.avi']);
 % videoName = strcat(['video-ltis-order2-',...
-%     num2str(inputFreq,'%.1f'),...
+%     num2str(inputFreq,'%.2f'),...
 %     'hz.avi']);
 % videoName = strcat(['video-singleloop-',...
 %     num2str(inputFreq,'%.1f'),...
 %     'hz.avi']);
-% videoName = strcat(['video-butterfly-',...
+% videoName = strcat(['video-sym-butterfly-',...
 %     num2str(inputFreq,'%.1f'),...
 %     'hz.avi']);
-frameSkip = 8;
+videoName = strcat(['video-asym-butterfly-',...
+    num2str(inputFreq,'%.1f'),...
+    'hz.avi']);
+frameSkip = 20;
 videoXOrig = 100;
 videoYOrig = 70;
 videoWidth = 720;
@@ -29,7 +32,7 @@ inputLimFactor = 0.1;
 inputTicks = linspace(dataHandler.inputMin, dataHandler.inputMax, 5);
 inputTickFactor = 1; %1200;
 inputTickOffset = 0;
-outputLimFactor = 0.1;
+outputLimFactor = 0.2;
 outputTicks = linspace(dataHandler.outputMin, dataHandler.outputMax, 5);
 outputTickFactor = 1; %600;
 outputTickOffset = 0; %1000;
@@ -117,8 +120,8 @@ for i=1:dataHandler.sampleLength
         'YData',[get(outputPlot,'YData') dataHandler.outputSeq(i)])
     set(inputPlot,'XData',[get(inputPlot,'XData') dataHandler.inputSeq(i)],...
         'YData',[get(inputPlot,'YData') dataHandler.timeSeq(i)])
-    drawnow
     if(mod(i,frameSkip)==0 || i==1)
+        drawnow
         frame = getframe(fig);
         writeVideo(videoWriter, frame);
     end

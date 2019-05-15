@@ -6,9 +6,9 @@ clc
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 inputMin = -1;
 inputMax = 1;
-totalTime = 15;
-timeStep = 0.01;
-inputFreq = 3/10;
+totalTime = 3;
+timeStep = 0.001;
+inputFreq = 5;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Creates input sequence
@@ -23,8 +23,8 @@ inputSeq = inputAmp*sin(2*pi*inputFreq*timeSeq) + inputOffset;
 % Set Preisach model initial state and create data handler
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 preisachRelayModel.resetRelaysOff();
-preisachRelayModel.setRelaysWindowByValue(-inf,-dataHandler.inputAmp/2,-inf,inf,1);
-% preisachRelayModel.setRelaysWindowByValue(-inf,-dataHandler.inputAmp/5,-inf,inf,1);
+% preisachRelayModel.setRelaysWindowByValue(-inf,-dataHandler.inputAmp/2,-inf,inf,1);
+preisachRelayModel.setRelaysWindowByValue(-inf,-dataHandler.inputAmp/5,-inf,inf,1);
 preisachRelayModel.updateRelays(inputSeq(1));
 preisachUtils = PreisachRelayUtils(preisachRelayModel);
 [outputSeq, relaysSeq] = preisachUtils.generateOutputSeq(inputSeq);

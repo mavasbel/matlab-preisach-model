@@ -25,7 +25,7 @@ weightFunc = zeros(gridDen, gridDen);
 for i=1:length(xVals)
     for j=1:length(yVals)
         if(gridY(i,j)>=-gridX(i,j)) 
-            weightFunc(i,j) = 1;
+            weightFunc(i,j) = 2;
         else
             weightFunc(i,j) = -1;
         end
