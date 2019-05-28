@@ -5,9 +5,9 @@ clc
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Input params
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-inputMin = -1;
+inputMin = -3;
 inputMax = 1;
-gridDen = 300;
+gridDen = 400;
 sampleLength = 400;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -21,11 +21,23 @@ yVals = linspace(inputMin, inputMax, gridDen);
 % z = (sin(2*pi*(gridY-gridX))) + (sin(2*pi*(gridX+gridY)));
 
 % Piecewise continuous symmetric weighting function
+% weightFunc = zeros(gridDen, gridDen);
+% for i=1:length(xVals)
+%     for j=1:length(yVals)
+%         if( gridY(i,j)>=-gridX(i,j) ) 
+%             weightFunc(i,j) = 1;
+%         else
+%             weightFunc(i,j) = -1;
+%         end
+%     end
+% end
+
+% Piecewise continuous ascending boundary
 weightFunc = zeros(gridDen, gridDen);
 for i=1:length(xVals)
     for j=1:length(yVals)
-        if(gridY(i,j)>=-gridX(i,j)) 
-            weightFunc(i,j) = 2;
+        if( gridY(i,j)>=0.2*gridX(i,j)+0.50 )
+            weightFunc(i,j) = 1;
         else
             weightFunc(i,j) = -1;
         end
@@ -35,7 +47,7 @@ end
 % Everything outside Preisach domain is 0
 for i=1:length(xVals)
     for j=1:length(yVals)
-        if(xVals(i)<yVals(j)) 
+        if( yVals(j)>xVals(i) ) 
             weightFunc(i,j) = 0;
         end
     end
@@ -59,6 +71,18 @@ dataHandler = DataHandler(inputSeq, outputSeq);
 preisachRelayModel.offset = -dataHandler.outputOffset;
 [outputSeq, relaysSeq] = preisachUtils.generateOutputSeq(inputSeq);
 dataHandler = DataHandler(inputSeq, outputSeq);
+
+%Major loop area
+Area = 0;
+for i=1:length(xVals)
+    for j=1:length(yVals)
+        if( yVals(j)<=xVals(i) ) 
+            Area = Area + 2*weightFunc(i,j)*...
+                (xVals(i)-yVals(j))*preisachRelayModel.gridArea;
+        end
+    end
+end
+disp(['Major loop area: ', num2str(Area)]);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Plot loop
