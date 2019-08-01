@@ -133,6 +133,17 @@ classdef PreisachPlots < handle
                 fig = obj.planeSubFig;
             end
             
+            % Everything outside Preisach domain to NaN
+            gridLength = length(xyGrid);
+            for i=1:gridLength
+                ii = gridLength-i+1; %index inversion for rows
+                for j=1:gridLength
+                    if( xyGrid(j)>xyGrid(ii) ) 
+                        weightFunc(i,j) = NaN;
+                    end
+                end
+            end
+            
             stdDevColorFactor = 2.2;    
             avgColorFactor = 3.5;
 
@@ -164,6 +175,7 @@ classdef PreisachPlots < handle
             view([0 90])
             
             axis square;
+            grid off;
         end
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -192,6 +204,17 @@ classdef PreisachPlots < handle
                 fig = obj.surfaceFig;
             else
                 figure(obj.surfaceFig);
+            end
+            
+            % Everything outside Preisach domain to NaN
+            gridLength = length(xyGrid);
+            for i=1:gridLength
+                ii = gridLength-i+1; %index inversion for rows
+                for j=1:gridLength
+                    if( xyGrid(j)>xyGrid(ii) ) 
+                        weightFunc(i,j) = NaN;
+                    end
+                end
             end
             
             stdDevColorFactor = 2.2;    
@@ -227,6 +250,7 @@ classdef PreisachPlots < handle
             view([0 90])
             
             axis square;
+            grid off;
         end
                 
     end

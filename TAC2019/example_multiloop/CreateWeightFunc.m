@@ -5,10 +5,10 @@ clc
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Input params
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-inputMin = -3;
+inputMin = -1;
 inputMax = 1;
-gridDen = 10;
-sampleLength = 10;
+gridDen = 200;
+sampleLength = 200;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Create weighting function
@@ -18,7 +18,7 @@ yVals = linspace(inputMin, inputMax, gridDen);
 [gridX, gridY] = meshgrid(xVals,yVals);
 
 % Journal function:
-% weightFunc = (sin(2*pi*(gridY-gridX))) + (sin(2*pi*(gridX+gridY)));
+weightFunc = (sin(2*pi*(gridY-gridX))) + (sin(2*pi*(gridX+gridY)));
 
 % Piecewise continuous symmetric weighting function
 % weightFunc = zeros(gridDen, gridDen);
@@ -33,16 +33,16 @@ yVals = linspace(inputMin, inputMax, gridDen);
 % end
 
 % Piecewise continuous ascending boundary
-weightFunc = zeros(gridDen, gridDen);
-for i=1:length(xVals)
-    for j=1:length(yVals)
-        if( gridY(i,j)>=0.2*gridX(i,j)+0.50 )
-            weightFunc(i,j) = 1;
-        else
-            weightFunc(i,j) = -1;
-        end
-    end
-end
+% weightFunc = zeros(gridDen, gridDen);
+% for i=1:length(xVals)
+%     for j=1:length(yVals)
+%         if( gridY(i,j)>=0.2*gridX(i,j)+0.50 )
+%             weightFunc(i,j) = 1;
+%         else
+%             weightFunc(i,j) = -1;
+%         end
+%     end
+% end
 
 % Everything outside Preisach domain is 0
 for i=1:length(xVals)
@@ -102,7 +102,7 @@ dataPlotter.plotWeightFunc(preisachRelayModel.weightFunc, preisachRelayModel.xyG
 % Add rectangles
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % linePoints = 350;
-% maxZ = max(max(z));
+% maxZ = max(max(weightFunc));
 
 % inputCross= -0.5;
 % inputCross= 0;
