@@ -11,8 +11,8 @@ end
 
 preisachRelayModel.resetRelaysOn();
 initialRelays = preisachRelayModel.relays;
-inputMin = xyGrid(1);
-inputMax = xyGrid(end);
+inputMin = inputGrid(1);
+inputMax = inputGrid(end);
 inputAmp = dataHandler.inputAmp;
 outputMin = dataHandler.outputMin;
 outputMax = dataHandler.outputMax;

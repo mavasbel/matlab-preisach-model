@@ -7,21 +7,21 @@ clc
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 inputMin = -1;
 inputMax = 1;
-gridDen = 400;
+gridSize = 400;
 sampleLength = 800;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Create weighting function
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-xVals = linspace(inputMin, inputMax, gridDen);
-yVals = linspace(inputMin, inputMax, gridDen);
+xVals = linspace(inputMin, inputMax, gridSize);
+yVals = linspace(inputMin, inputMax, gridSize);
 [gridX, gridY] = meshgrid(xVals,yVals);
 
 % Journal function:
 % z = (sin(2*pi*(gridY-gridX))) + (sin(2*pi*(gridX+gridY)));
 
 % Piecewise continuous symmetric weighting function
-weightFunc = zeros(gridDen, gridDen);
+weightFunc = zeros(gridSize, gridSize);
 for i=1:length(xVals)
     for j=1:length(yVals)
         if(gridY(i,j)>=-gridX(i,j)) 
@@ -44,7 +44,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Create Preisach model
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-preisachRelayModel = PreisachRelayModel([inputMin, inputMax], gridDen);
+preisachRelayModel = PreisachRelayModel([inputMin, inputMax], gridSize);
 preisachRelayModel.resetRelaysOff();
 preisachRelayModel.weightFunc = flipud(weightFunc);
 preisachRelayModel.printInfo();
@@ -67,7 +67,7 @@ dataPlotter = DataPlotter();
 dataPlotter.plotInputPeriod(dataHandler);
 dataPlotter.plotOutputPeriod(dataHandler);
 dataPlotter.plotLoopPeriod(dataHandler);
-dataPlotter.plotWeightFunc(preisachRelayModel.weightFunc, preisachRelayModel.xyGrid);
+dataPlotter.plotWeightFunc(preisachRelayModel.weightFunc, preisachRelayModel.inputGrid);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Creating parameters for simulation

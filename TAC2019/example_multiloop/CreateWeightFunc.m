@@ -7,21 +7,21 @@ clc
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 inputMin = -1;
 inputMax = 1;
-gridDen = 200;
+gridSize = 200;
 sampleLength = 200;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Create weighting function
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-xVals = linspace(inputMin, inputMax, gridDen);
-yVals = linspace(inputMin, inputMax, gridDen);
+xVals = linspace(inputMin, inputMax, gridSize);
+yVals = linspace(inputMin, inputMax, gridSize);
 [gridX, gridY] = meshgrid(xVals,yVals);
 
 % Journal function:
 weightFunc = (sin(2*pi*(gridY-gridX))) + (sin(2*pi*(gridX+gridY)));
 
 % Piecewise continuous symmetric weighting function
-% weightFunc = zeros(gridDen, gridDen);
+% weightFunc = zeros(gridSize, gridSize);
 % for i=1:length(xVals)
 %     for j=1:length(yVals)
 %         if( gridY(i,j)>=-gridX(i,j) ) 
@@ -33,7 +33,7 @@ weightFunc = (sin(2*pi*(gridY-gridX))) + (sin(2*pi*(gridX+gridY)));
 % end
 
 % Piecewise continuous ascending boundary
-% weightFunc = zeros(gridDen, gridDen);
+% weightFunc = zeros(gridSize, gridSize);
 % for i=1:length(xVals)
 %     for j=1:length(yVals)
 %         if( gridY(i,j)>=0.2*gridX(i,j)+0.50 )
@@ -56,7 +56,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Create Preisach model
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-preisachRelayModel = PreisachRelayModel([inputMin, inputMax], gridDen);
+preisachRelayModel = PreisachRelayModel([inputMin, inputMax], gridSize);
 preisachRelayModel.resetRelaysOff();
 preisachRelayModel.weightFunc = flipud(weightFunc);
 preisachRelayModel.printInfo();
@@ -78,7 +78,7 @@ for i=1:length(xVals)
     for j=1:length(yVals)
         if( yVals(j)<=xVals(i) ) 
             Area = Area + 2*weightFunc(i,j)*...
-                (xVals(i)-yVals(j))*preisachRelayModel.gridArea;
+                (xVals(i)-yVals(j))*preisachRelayModel.relayArea;
         end
     end
 end
@@ -91,7 +91,7 @@ dataPlotter = DataPlotter();
 dataPlotter.plotInputPeriod(dataHandler);
 dataPlotter.plotOutputPeriod(dataHandler);
 dataPlotter.plotLoopPeriod(dataHandler);
-dataPlotter.plotWeightFunc(preisachRelayModel.weightFunc, preisachRelayModel.xyGrid);
+dataPlotter.plotWeightFunc(preisachRelayModel.weightFunc, preisachRelayModel.inputGrid);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Creating parameters for simulation

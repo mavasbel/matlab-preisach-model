@@ -78,7 +78,7 @@ for i=1:length(compFileHandlers)
     title('Real', 'Interpreter', 'none');
 
     preisachRelayModel.resetRelaysOff();
-%     preisachRelayModel.setRelaysWindowValue(1,1,preisachRelayModel.gridDen,1,30);
+%     preisachRelayModel.setRelaysWindowValue(1,1,preisachRelayModel.gridSize,1,30);
     [compOutputSeq, compRelaysSeq] = preisachUtils.generateOutputSeq(dataHandler.inputSeq);
     
     allModelPlots.plotLoopFig(dataHandler.inputSeq, ...

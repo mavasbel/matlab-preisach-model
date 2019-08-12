@@ -5,44 +5,48 @@ clc
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Input params
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-inputMin = -3;
+inputMin = -1;
 inputMax = 1;
-gridDen = 10;
-sampleLength = 10;
+gridSize = 500;
+sampleLength = 200;
+% inputMin = -3;
+% inputMax = 1;
+% gridSize = 10;
+% sampleLength = 10;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Create weighting function
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-xVals = linspace(inputMin, inputMax, gridDen);
-yVals = linspace(inputMin, inputMax, gridDen);
+xVals = linspace(inputMin, inputMax, gridSize);
+yVals = linspace(inputMin, inputMax, gridSize);
 [gridX, gridY] = meshgrid(xVals,yVals);
 
 % Journal function:
 % weightFunc = (sin(2*pi*(gridY-gridX))) + (sin(2*pi*(gridX+gridY)));
 
 % Piecewise continuous symmetric weighting function
-% weightFunc = zeros(gridDen, gridDen);
-% for i=1:length(xVals)
-%     for j=1:length(yVals)
-%         if( gridY(i,j)>=-gridX(i,j) ) 
-%             weightFunc(i,j) = 1;
-%         else
-%             weightFunc(i,j) = -1;
-%         end
-%     end
-% end
-
-% Piecewise continuous ascending boundary
-weightFunc = zeros(gridDen, gridDen);
+weightFunc = zeros(gridSize, gridSize);
 for i=1:length(xVals)
     for j=1:length(yVals)
-        if( gridY(i,j)>=0.2*gridX(i,j)+0.50 )
+        if( gridY(i,j)>=-gridX(i,j) ) 
             weightFunc(i,j) = 1;
         else
             weightFunc(i,j) = -1;
         end
     end
 end
+
+% Piecewise continuous ascending boundary
+% weightFunc = zeros(gridSize, gridSize);
+% for i=1:length(xVals)
+%     for j=1:length(yVals)
+%         if( gridY(i,j)>=0.2*gridX(i,j)+0.50 )
+%             weightFunc(i,j) = 1;
+%         else
+%             weightFunc(i,j) = -1;
+%         end
+%     end
+% end
 
 % Everything outside Preisach domain is 0
 for i=1:length(xVals)
@@ -56,7 +60,7 @@ end
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Create Preisach model
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-preisachRelayModel = PreisachRelayModel([inputMin, inputMax], gridDen);
+preisachRelayModel = PreisachRelayModel([inputMin, inputMax], gridSize);
 preisachRelayModel.resetRelaysOff();
 preisachRelayModel.weightFunc = flipud(weightFunc);
 preisachRelayModel.printInfo();
@@ -78,7 +82,7 @@ for i=1:length(xVals)
     for j=1:length(yVals)
         if( yVals(j)<=xVals(i) ) 
             Area = Area + 2*weightFunc(i,j)*...
-                (xVals(i)-yVals(j))*preisachRelayModel.gridArea;
+                (xVals(i)-yVals(j))*preisachRelayModel.relayArea;
         end
     end
 end
@@ -91,7 +95,7 @@ dataPlotter = DataPlotter();
 dataPlotter.plotInputPeriod(dataHandler);
 dataPlotter.plotOutputPeriod(dataHandler);
 dataPlotter.plotLoopPeriod(dataHandler);
-dataPlotter.plotWeightFunc(preisachRelayModel.weightFunc, preisachRelayModel.xyGrid);
+dataPlotter.plotWeightFunc(preisachRelayModel.weightFunc, preisachRelayModel.inputGrid);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Creating parameters for simulation

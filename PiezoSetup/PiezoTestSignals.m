@@ -22,7 +22,7 @@ waveGen = TriangleWaveGenerator;
 % func = waveGen.periodic(Amp, Period, 0, Pk2PkAscTime, times);
 % func = waveGen.periodicWithSlopes(Amp, AscSlope, DescSlope, times);
 % func = waveGen.fading(Amp, Period, Pk2PkAscTime, 0.1, times);
-func = waveGen.fadingWithSlopes(Amp, AscSlope, DescSlope, 0.1, times);
+% func = waveGen.fadingWithSlopes(Amp, AscSlope, DescSlope, 0.1, times);
 % func = waveGen.periodic(Amp, Period, -3*Period/4, Pk2PkAscTime, times);
 % func = 0.898*Amp*triangularPulse(1, 1+Pk2PkAscTime, 1+Period, times);
 

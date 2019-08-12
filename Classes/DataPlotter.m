@@ -145,7 +145,7 @@ classdef DataPlotter < handle
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         
-        function fig = plotWeightFunc(obj, weightFunc, xyGrid)  
+        function fig = plotWeightFunc(obj, weightFunc, inputGrid)  
             if(isempty(obj.surfaceFig) || ~ishghandle(obj.surfaceFig))
                 obj.surfaceFig = figure; hold on; grid on;
                 fig = obj.surfaceFig;
@@ -154,11 +154,11 @@ classdef DataPlotter < handle
             end
             
             % Everything outside Preisach domain to NaN
-            gridLength = length(xyGrid);
+            gridLength = length(inputGrid);
             for i=1:gridLength
                 ii = gridLength-i+1; %index inversion for rows
                 for j=1:gridLength
-                    if( xyGrid(j)>xyGrid(ii) ) 
+                    if( inputGrid(j)>inputGrid(ii) ) 
                         weightFunc(i,j) = NaN;
                     end
                 end
@@ -182,10 +182,10 @@ classdef DataPlotter < handle
             maxStdDev = nanmax([posStdDev, negStdDev]);
             maxAvg = nanmax([abs(posAvg), abs(negAvg)]);
 
-            [xMesh, yMesh] = meshgrid(xyGrid, fliplr(xyGrid));
+            [xMesh, yMesh] = meshgrid(inputGrid, fliplr(inputGrid));
             surf(xMesh, yMesh, weightFunc, 'edgecolor', 'none');
-            xlim([xyGrid(1) xyGrid(end)]);
-            ylim([xyGrid(1) xyGrid(end)]);
+            xlim([inputGrid(1) inputGrid(end)]);
+            ylim([inputGrid(1) inputGrid(end)]);
 
             caxis([-stdDevColorFactor*maxStdDev, stdDevColorFactor*maxStdDev]);
 

@@ -50,9 +50,9 @@ printFittingInfo(dataHandler, fittedOutputSeq(:), filterTime, fittingTime, weigh
 preisachPlots.plotOutputSubFig(dataHandler.indexesSeq, fittedOutputSeq, 'Fitted Output', 'k');
 preisachPlots.plotLoopSubFig(dataHandler.inputSeq, dataHandler.outputSeq, 'Real data', 'r');
 preisachPlots.plotLoopSubFig(dataHandler.inputSeq, fittedOutputSeq, 'Fitted result', 'b');
-preisachPlots.plotSurfaceSubFig(preisachRelayModel.weightFunc, preisachRelayModel.xyGrid);
+preisachPlots.plotSurfaceSubFig(preisachRelayModel.weightFunc, preisachRelayModel.inputGrid);
 
-preisachPlots.plotSurfaceFig(preisachRelayModel.weightFunc, preisachRelayModel.xyGrid);
+preisachPlots.plotSurfaceFig(preisachRelayModel.weightFunc, preisachRelayModel.inputGrid);
 
 if (~exist('isBatch', 'var') || isBatch ~= true) run('./CreateSimulinkParams'); end
 
