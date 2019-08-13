@@ -37,16 +37,20 @@ classdef PreisachRelayModel < matlab.mixin.SetGet %handle
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         
+        % Set all relays to off value
         function relays = resetRelaysOff(obj)
             obj.relays = obj.relayOffVal*fliplr(triu(ones(obj.gridSize, obj.gridSize)));
             relays = obj.relays;
         end
         
+        % Set all relays to off value
         function relays = resetRelaysOn(obj)
             obj.relays = obj.relayOnVal*fliplr(triu(ones(obj.gridSize, obj.gridSize)));
             relays = obj.relays;
         end
         
+        % Set all relays in square region delimited by indexes to given
+        % state
         function relays = setRelaysWindow(obj,...
                 leftIdx, rightIdx,...
                 lowerIdx, upperIdx,...
@@ -56,8 +60,11 @@ classdef PreisachRelayModel < matlab.mixin.SetGet %handle
                 relayState*ones(col, col);
             obj.relays = obj.relays.*...
                         fliplr(triu(ones(obj.gridSize, obj.gridSize)));
+            relays = obj.relays;
         end
         
+        % Set all relays in square region delimited by values (alpha, beta)
+        % to a given state
         function relays = setRelaysWindowByValue(obj,...
                 leftVal, rightVal,...
                 lowerVal, upperVal,...
@@ -82,6 +89,7 @@ classdef PreisachRelayModel < matlab.mixin.SetGet %handle
 
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         
+        % Update the state of relays according to input value
         function relays = updateRelays(obj, input)
             if( input >= obj.inputGrid(end))
                 obj.relays = obj.relayOnVal*fliplr(triu(ones(obj.gridSize, obj.gridSize)));
@@ -97,6 +105,7 @@ classdef PreisachRelayModel < matlab.mixin.SetGet %handle
             relays=obj.relays;
         end
         
+        % Compute the output
         function output = getOutput(obj)
             output = sum(sum(obj.relays(:,:).*obj.weightFunc))*obj.relayArea + obj.offset;
         end

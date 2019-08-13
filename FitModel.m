@@ -21,11 +21,11 @@ preisachRelayModel.printInfo();
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Plot originals
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-preisachPlots = PreisachPlots();
-preisachPlots.plotInputSubFig(1:dataHandler.origSampleLength, dataHandler.origInputSeq, 'Original Input', 'r');
-preisachPlots.plotInputSubFig(dataHandler.indexesSeq, dataHandler.inputSeq, 'Adjusted Input', 'b');
-preisachPlots.plotOutputSubFig(1:dataHandler.origSampleLength, dataHandler.origOutputSeq, 'Original Output', 'r');
-preisachPlots.plotOutputSubFig(dataHandler.indexesSeq, dataHandler.outputSeq, 'Adjusted Output', 'b');
+fitPlotter = FitPlotter();
+fitPlotter.subfigInput(1:dataHandler.origSampleLength, dataHandler.origInputSeq, 'Original Input', 'r');
+fitPlotter.subfigInput(dataHandler.indexesSeq, dataHandler.inputSeq, 'Adjusted Input', 'b');
+fitPlotter.subfigOutput(1:dataHandler.origSampleLength, dataHandler.origOutputSeq, 'Original Output', 'r');
+fitPlotter.subfigOutput(dataHandler.indexesSeq, dataHandler.outputSeq, 'Adjusted Output', 'b');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Fitting
@@ -47,12 +47,12 @@ fittedOutputTime = toc(fittedOutputTic);
 printFittingInfo(dataHandler, fittedOutputSeq(:), filterTime, fittingTime, weightFuncTime, fittedOutputTime);
 
 % Add fitted curve and weight plane
-preisachPlots.plotOutputSubFig(dataHandler.indexesSeq, fittedOutputSeq, 'Fitted Output', 'k');
-preisachPlots.plotLoopSubFig(dataHandler.inputSeq, dataHandler.outputSeq, 'Real data', 'r');
-preisachPlots.plotLoopSubFig(dataHandler.inputSeq, fittedOutputSeq, 'Fitted result', 'b');
-preisachPlots.plotSurfaceSubFig(preisachRelayModel.weightFunc, preisachRelayModel.inputGrid);
+fitPlotter.subfigOutput(dataHandler.indexesSeq, fittedOutputSeq, 'Fitted Output', 'k');
+fitPlotter.subfigLoop(dataHandler.inputSeq, dataHandler.outputSeq, 'Real data', 'r');
+fitPlotter.subfigLoop(dataHandler.inputSeq, fittedOutputSeq, 'Fitted result', 'b');
+fitPlotter.subfigWeightFunc(preisachRelayModel.weightFunc, preisachRelayModel.inputGrid);
 
-preisachPlots.plotSurfaceFig(preisachRelayModel.weightFunc, preisachRelayModel.inputGrid);
+fitPlotter.figWeightFunc(preisachRelayModel.weightFunc, preisachRelayModel.inputGrid);
 
 if (~exist('isBatch', 'var') || isBatch ~= true) run('./CreateSimulinkParams'); end
 

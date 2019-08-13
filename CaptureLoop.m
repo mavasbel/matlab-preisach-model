@@ -36,8 +36,8 @@ inputSeq = interp1(X, linspace(1,length(X),100), 'pchip');
 outputSeq = interp1(Y, linspace(1,length(Y),100), 'pchip');
 
 dataHandler = DataHandler(inputSeq(:), outputSeq(:));
-createdLoopPlots = PreisachPlots();
-createdLoopPlots.plotInputSubFig(1:dataHandler.sampleLength, dataHandler.inputSeq, 'Interp Input', 'r');
-createdLoopPlots.plotOutputSubFig(1:dataHandler.sampleLength, dataHandler.outputSeq, 'Interp Output', 'r');
-createdLoopPlots.plotLoopFig(X, Y, 'Captured Loop', 'b');
-createdLoopPlots.plotLoopFig(dataHandler.inputSeq, dataHandler.outputSeq, 'Interp Loop', 'r');
+createdLoopPlots = FitPlotter();
+createdLoopPlots.subfigInput(1:dataHandler.sampleLength, dataHandler.inputSeq, 'Interp Input', 'r');
+createdLoopPlots.subfigOutput(1:dataHandler.sampleLength, dataHandler.outputSeq, 'Interp Output', 'r');
+createdLoopPlots.figLoop(X, Y, 'Captured Loop', 'b');
+createdLoopPlots.figLoop(dataHandler.inputSeq, dataHandler.outputSeq, 'Interp Loop', 'r');

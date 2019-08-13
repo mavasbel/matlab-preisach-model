@@ -34,7 +34,7 @@ dataHandler = DataHandler(inputSeq, outputSeq, timeSeq);
 % Plot input, output and loop
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 dataPlotter = DataPlotter();
-dataPlotter.plotInput(dataHandler);
-dataPlotter.plotOutput(dataHandler);
-dataPlotter.plotLoop(dataHandler);
+DataPlotter.plotInput(dataHandler);
+DataPlotter.plotOutput(dataHandler);
+DataPlotter.plotLoop(dataHandler);
 dataHandler.resetOrigSequences();

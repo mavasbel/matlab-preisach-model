@@ -1,4 +1,4 @@
-classdef PreisachPlots < handle
+classdef FitPlotter < handle
     properties
         inputOutputFig
         inputSubFig
@@ -35,7 +35,7 @@ classdef PreisachPlots < handle
             end
         end
         
-        function fig = plotInputSubFig(obj, xData, yData, dataLegend, dataColor)
+        function fig = subfigInput(obj, xData, yData, dataLegend, dataColor)
             obj.getOrCreateInputOutputFig();
             
             if(isempty(obj.inputSubFig))
@@ -59,7 +59,7 @@ classdef PreisachPlots < handle
             set(leg, 'Interpreter', 'none');
         end
         
-        function fig = plotOutputSubFig(obj, xData, yData, dataLegend, dataColor)
+        function fig = subfigOutput(obj, xData, yData, dataLegend, dataColor)
             obj.getOrCreateInputOutputFig();
             
             if(isempty(obj.outputSubFig))
@@ -96,7 +96,7 @@ classdef PreisachPlots < handle
             end
         end
         
-        function fig = plotLoopSubFig(obj, xData, yData, dataLegend, dataColor)
+        function fig = subfigLoop(obj, xData, yData, dataLegend, dataColor)
             obj.getOrCreateLoopPlaneFig();
             
             if(isempty(obj.loopSubFig))
@@ -120,7 +120,7 @@ classdef PreisachPlots < handle
             set(leg, 'Interpreter', 'none');
         end
         
-        function fig = plotSurfaceSubFig(obj, weightFunc, inputGrid)  
+        function fig = subfigWeightFunc(obj, weightFunc, inputGrid)  
             obj.getOrCreateLoopPlaneFig();
             
             if(isempty(obj.planeSubFig))
@@ -180,7 +180,7 @@ classdef PreisachPlots < handle
         
         %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
         
-        function fig = plotLoopFig(obj, xData, yData, dataLegend, dataColor)            
+        function fig = figLoop(obj, xData, yData, dataLegend, dataColor)            
             if(isempty(obj.loopFig) || ~ishghandle(obj.loopFig))
                 obj.loopFig = figure; hold on; grid on;
                 fig = obj.loopFig;
@@ -198,7 +198,7 @@ classdef PreisachPlots < handle
             set(leg, 'Interpreter', 'none');
         end
         
-        function fig = plotSurfaceFig(obj, weightFunc, inputGrid)  
+        function fig = figWeightFunc(obj, weightFunc, inputGrid)  
             if(isempty(obj.surfaceFig) || ~ishghandle(obj.surfaceFig))
                 obj.surfaceFig = figure; hold on; grid on;
                 fig = obj.surfaceFig;

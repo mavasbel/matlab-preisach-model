@@ -59,8 +59,8 @@ run('./FitModel.m');
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Comparing
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-allRealPlots = PreisachPlots();
-allModelPlots = PreisachPlots();
+allRealPlots = FitPlotter();
+allModelPlots = FitPlotter();
 compFileHandlers = FileHandler.lookForFiles(lookupPaths, compMatchFilter, skipFilter);
 for i=1:length(compFileHandlers) 
     disp('---------------------------------------------------------------');
@@ -69,11 +69,11 @@ for i=1:length(compFileHandlers)
     dataHandler = compFileHandlers(i).getDataHandler();
     dataHandler.interpSequence(1000);
     dataHandler.printInfo();
-    allRealPlots.plotInputSubFig(1:dataHandler.origSampleLength, ...
+    allRealPlots.subfigInput(1:dataHandler.origSampleLength, ...
         dataHandler.origInputSeq, compFileHandlers(i).fileName);
-    allRealPlots.plotOutputSubFig(1:dataHandler.origSampleLength, ...
+    allRealPlots.subfigOutput(1:dataHandler.origSampleLength, ...
         dataHandler.origOutputSeq, compFileHandlers(i).fileName);
-    allRealPlots.plotLoopFig(dataHandler.inputSeq, ...
+    allRealPlots.figLoop(dataHandler.inputSeq, ...
         dataHandler.outputSeq, compFileHandlers(i).fileName);
     title('Real', 'Interpreter', 'none');
 
@@ -81,18 +81,18 @@ for i=1:length(compFileHandlers)
 %     preisachRelayModel.setRelaysWindowValue(1,1,preisachRelayModel.gridSize,1,30);
     [compOutputSeq, compRelaysSeq] = preisachUtils.generateOutputSeq(dataHandler.inputSeq);
     
-    allModelPlots.plotLoopFig(dataHandler.inputSeq, ...
+    allModelPlots.figLoop(dataHandler.inputSeq, ...
         compOutputSeq, compFileHandlers(i).fileName);
     title('Model', 'Interpreter', 'none');
     
-    compPlots = PreisachPlots();
-%     compPlots.plotInputSubFig(1:dataHandler.origSampleLength, dataHandler.origInputSeq, 'Input', 'r');
+    compPlots = FitPlotter();
+%     compPlots.subfigInput(1:dataHandler.origSampleLength, dataHandler.origInputSeq, 'Input', 'r');
 %     title(compFileHandlers(i).fileName, 'Interpreter', 'none');
-%     compPlots.plotOutputSubFig(1:dataHandler.origSampleLength, dataHandler.origOutputSeq, 'Real Output', 'r');
-%     compPlots.plotOutputSubFig(dataHandler.indexesSeq, compOutputSeq, 'Model Output', 'b');
+%     compPlots.subfigOutput(1:dataHandler.origSampleLength, dataHandler.origOutputSeq, 'Real Output', 'r');
+%     compPlots.subfigOutput(dataHandler.indexesSeq, compOutputSeq, 'Model Output', 'b');
 %     title(compFileHandlers(i).fileName, 'Interpreter', 'none');
-    compPlots.plotLoopFig(dataHandler.inputSeq, dataHandler.outputSeq, 'Real', 'r');
-    compPlots.plotLoopFig(dataHandler.inputSeq, compOutputSeq, 'Model', 'b');
+    compPlots.figLoop(dataHandler.inputSeq, dataHandler.outputSeq, 'Real', 'r');
+    compPlots.figLoop(dataHandler.inputSeq, compOutputSeq, 'Model', 'b');
     title(compFileHandlers(i).fileName, 'Interpreter', 'none');
 end
 isBatch = false;

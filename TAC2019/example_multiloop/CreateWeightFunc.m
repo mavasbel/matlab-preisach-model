@@ -87,11 +87,10 @@ disp(['Major loop area: ', num2str(Area)]);
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Plot loop
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-dataPlotter = DataPlotter();
-dataPlotter.plotInputPeriod(dataHandler);
-dataPlotter.plotOutputPeriod(dataHandler);
-dataPlotter.plotLoopPeriod(dataHandler);
-dataPlotter.plotWeightFunc(preisachRelayModel.weightFunc, preisachRelayModel.inputGrid);
+DataPlotter.plotInputPeriod(dataHandler);
+DataPlotter.plotOutputPeriod(dataHandler);
+DataPlotter.plotLoopPeriod(dataHandler);
+DataPlotter.plotWeightFunc(preisachRelayModel.weightFunc, preisachRelayModel.inputGrid);
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Creating parameters for simulation

@@ -39,7 +39,6 @@ dataHandler.outputMax = inputMax;
 dataHandler.outputAmp = (dataHandler.outputMax - dataHandler.outputMin)/2;
 dataHandler.outputOffset = (dataHandler.outputMax + dataHandler.outputMin)/2;
 
-dataPlotter = DataPlotter();
-dataPlotter.plotInput(dataHandler);
-dataPlotter.plotOutput(dataHandler);
-dataPlotter.plotLoop(dataHandler);
+DataPlotter.plotInput(dataHandler);
+DataPlotter.plotOutput(dataHandler);
+DataPlotter.plotLoop(dataHandler);

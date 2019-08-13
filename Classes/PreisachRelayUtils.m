@@ -123,7 +123,7 @@ classdef PreisachRelayUtils < handle
         function relaysMatrix = buildRelaysMatrix(obj, relaysSeq)
             samplesLength = size(relaysSeq, 3);
             relayIdx = 1;
-            relaysMatrix = zeros(samplesLength, obj.preisachRelayModel.totalRelays);
+            relaysMatrix = zeros(samplesLength, obj.preisachRelayModel.relaysNum);
             for i=1:obj.preisachRelayModel.gridSize
                 ii = obj.preisachRelayModel.gridSize-i+1; %index inversion for rows
                 for j=1:i
