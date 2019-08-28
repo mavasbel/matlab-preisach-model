@@ -5,12 +5,12 @@ clc
 % Name prefix, suffix, and time limits for triangular inputs
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-% namePrefix = 'RMN_1400V_';
-% nameSuffix = 'V_100V';
-% initTimeLimits = [0, 2.0];
-% afterInitTimeLimits = [2.75, 3.0];
-% pulse1TimeLimits = [3.125, 3.375];
-% afterPulse1TimeLimits = [4.25, 4.5];
+namePrefix = 'RMN_1400V_';
+nameSuffix = 'V_100V';
+initTimeLimits = [0, 2.0];
+afterInitTimeLimits = [2.75, 3.0];
+pulse1TimeLimits = [3.125, 3.375];
+afterPulse1TimeLimits = [4.25, 4.5];
 
 % namePrefix = 'RMN_1200V_';
 % nameSuffix = 'V_100V';
@@ -128,6 +128,8 @@ for i=1:length(remnants) % Add each measurement independent
     end
 end
 xlabel('Pulse Amp (V)')
-ylabel('Deformation (nm)')
+ylabel('Remnant Deformation (nm)')
+% ylim([-450, 500])
+
 
 

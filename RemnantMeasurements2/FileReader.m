@@ -5,20 +5,20 @@ clc
 % File paths
 
 % Triangular inputs
-files = [
-        "./remnant_measurements/triag/RMN_1200V_VAR.dat";
-        "./remnant_measurements/triag/RMN_1400V_VAR.dat"; 
-        "./remnant_measurements/triag/RMN_FADE_VAR.dat"; 
-        "./remnant_measurements/triag/RMN_1400V_1000V_VAR.dat"; 
-    ];
+% files = [
+%         "./remnant_measurements/triag/RMN_1200V_VAR.dat";
+%         "./remnant_measurements/triag/RMN_1400V_VAR.dat"; 
+%         "./remnant_measurements/triag/RMN_FADE_VAR.dat"; 
+%         "./remnant_measurements/triag/RMN_1400V_1000V_VAR.dat"; 
+%     ];
 
 % Trapezoidal inputs
-% files = [
-%         "./remnant_measurements/trap/RMN_TRAP_1200V_VAR.dat"; 
-%         "./remnant_measurements/trap/RMN_TRAP_1400V_VAR.dat"; 
-%         "./remnant_measurements/trap/RMN_TRAP_1400V_500V_VAR.dat"; 
-%         "./remnant_measurements/trap/RMN_TRAP_1400V_1000V_VAR.dat";
-%     ];
+files = [
+        "./remnant_measurements/trap/RMN_TRAP_1200V_VAR.dat"; 
+        "./remnant_measurements/trap/RMN_TRAP_1400V_VAR.dat"; 
+        "./remnant_measurements/trap/RMN_TRAP_1400V_500V_VAR.dat"; 
+        "./remnant_measurements/trap/RMN_TRAP_1400V_1000V_VAR.dat";
+    ];
 
 % Create measurements array
 measurements = [];

@@ -27,14 +27,14 @@ clc
 % pulse2TimeLimits = [5.025, 5.975];
 % afterPulse2TimeLimits = [6.75, 7.0];
 
-% namePrefix = 'RMN_1400V_1000V_';
-% nameSuffix = 'V';
-% initTimeLimits = [0, 2.0];
-% afterInitTimeLimits = [2.75, 3.0];
-% pulse1TimeLimits = [3.025, 3.975];
-% afterPulse1TimeLimits = [4.75, 5.0];
-% pulse2TimeLimits = [5.025, 5.975];
-% afterPulse2TimeLimits = [6.75, 7.0];
+namePrefix = 'RMN_1400V_1000V_';
+nameSuffix = 'V';
+initTimeLimits = [0, 2.0];
+afterInitTimeLimits = [2.75, 3.0];
+pulse1TimeLimits = [3.025, 3.975];
+afterPulse1TimeLimits = [4.75, 5.0];
+pulse2TimeLimits = [5.025, 5.975];
+afterPulse2TimeLimits = [6.75, 7.0];
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -128,7 +128,7 @@ for i=1:length(remnants) % Add each measurement independent
             'MarkerSize', 4)
     end
 end
-xlabel('Second pulse Amp (V)')
-ylabel('Remnant change (nm)')
+xlabel('Pulse 2 Amp (V)')
+ylabel('Remnants Difference (nm)')
 
 

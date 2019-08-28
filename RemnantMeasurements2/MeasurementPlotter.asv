@@ -51,7 +51,7 @@ for i=1:length(measurements)
         xlabel('Time (s)')
         ylabel('Voltage (V)')
         legend('interpreter', 'none')
-%         xlim([0,7])
+        xlim([0,7])
         
         % Voltage vs Strain plot
         figure(); grid on; hold on;

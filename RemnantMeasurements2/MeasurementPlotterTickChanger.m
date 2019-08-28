@@ -1,0 +1,16 @@
+% Single pulse
+handler = gca;
+get(handler,'yTick');
+set(handler,'yTick',[0,1000,1400]);
+set(handler,'yTickLabel',{'0V', ...
+    'Pulse Amp', ...
+    'Initialization Amp'});
+
+% Multipulse
+% handler = gca;
+% get(handler,'yTick');
+% set(handler,'yTick',[0,600,1000,1400]);
+% set(handler,'yTickLabel',{'0V', ...
+%     'Pulse 2 Amp', ...
+%     'Pulse 1 Amp', ...
+%     'Initialization Amp'});
