@@ -7,7 +7,7 @@ clc
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 inputMin = -1;
 inputMax = 1;
-gridSize = 200;
+gridSize = 500;
 sampleLength = 100;
 % inputMin = -3;
 % inputMax = 1;

@@ -5,7 +5,7 @@ clc
 for i=1:length(measurements), disp(measurements(i).sampleName), end
 
 % Name of measurement to plot
-fullName = 'PNZT_F_400V_1Hz';
+fullName = 'PNZT_PULSE_1200V_600V';
 for i=1:length(measurements)
     if strcmp(measurements(i).sampleName, fullName)>0 && ...
         strcmp(measurements(i).waveform, 'Manual1')>0 

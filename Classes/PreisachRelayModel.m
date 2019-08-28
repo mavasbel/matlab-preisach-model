@@ -10,7 +10,6 @@ classdef PreisachRelayModel < matlab.mixin.SetGet %handle
         relaysNum;
         
         relays;
-        
         weightFunc;
         offset;
     end
@@ -49,7 +48,7 @@ classdef PreisachRelayModel < matlab.mixin.SetGet %handle
             relays = obj.relays;
         end
         
-        % Set all relays in square region delimited by indexes to given
+        % Set all relays in square region delimited by indexes to a given
         % state
         function relays = setRelaysWindow(obj,...
                 leftIdx, rightIdx,...
@@ -102,7 +101,7 @@ classdef PreisachRelayModel < matlab.mixin.SetGet %handle
                 obj.relays(row:end, 1:col) = obj.relayOnVal*fliplr(triu(ones(col, col)));
                 obj.relays(1:row-1, col+1:end) = obj.relayOffVal*fliplr(triu(ones(row-1, row-1)));
             end
-            relays=obj.relays;
+            relays = obj.relays;
         end
         
         % Compute the output

@@ -1,0 +1,149 @@
+close all
+clc
+
+% Control objective and initial pulse amp
+refs = [-0.4, -0.7];
+pulseAmps = [1.0, 1.0];
+
+% Control paremeters
+lambda = 1.2;
+K0 = 0.75/lambda;
+K1 = 1.0/lambda;
+initialAmp = -1.0;
+errorThreshold = 0.0015;
+iterationsLimit = 30;
+
+% Model parameters
+coupligFactor = 0.5;
+resetAmp = -1.0;
+pulseAmpMin = 0.5;
+pulseAmpMax = 1;
+reachableMin = -0.83531;
+reachableMax = -0.33;
+inputSamples = 400;
+
+% Plot paramenters
+resetColor = [0 0 1];
+selectedColor = [0.9 0 0];
+neightbourColor = [0 0 0];
+
+% Bounds refs and initial pulses to given intervals
+refs = max(min(refs', reachableMax), reachableMin)';
+pulseAmps = max(min(pulseAmps', pulseAmpMax), pulseAmpMin)';
+
+% Create axes for plots
+fig = figure;
+axesHandlers = [];
+for i=1:length(refs)
+    axesHandler = subplot(1, length(refs), i);
+    xlim(axesHandler, [-1.2 1.2]);
+    ylim(axesHandler, [-1.0 0.8]);
+    grid(axesHandler, 'on');
+    hold(axesHandler, 'on');
+    plot(axesHandler, 0, refs(i), 'ro', 'markersize', 4);
+    axesHandlers = [axesHandlers, axesHandler];
+end
+
+% Get indexes in order
+iteration = 1;
+[~, sortedRefsIdx] = sort(refs);
+resetSignal = generateSignal(resetAmp, inputSamples);
+while(iteration<iterationsLimit)
+    % Print stats number
+    disp('-------------------------')
+    disp(['Iteration: ', num2str(iteration)])
+    disp(['Pulse:     ', num2str(pulseAmps, '   %+6.6f')])
+    disp(['Ref:       ', num2str(refs, '   %+6.6f')])
+    
+    % Generate animated line handlers for the iteration
+    resetLines = [];
+    for j=1:length(refs)
+        resetLine = animatedline(axesHandlers(j), 'Color', resetColor);
+        resetLines = [resetLines, resetLine];
+    end
+    
+    % Apply reset to all Preisachs
+    for i=1:inputSamples
+        for j=1:length(refs)
+            preisachArray(j).updateRelays(resetSignal(i));
+            output = preisachArray(j).getOutput();
+            addpoints(resetLines(j), resetSignal(i), output)
+        end
+        drawnow limitrate;
+    end
+    
+    % Clear previous input
+    for j=1:length(refs), for jj=1:length(refs)
+        clearpoints(inputsLines(j,jj)); 
+    end, end
+    
+    % Sort pulse amps and start application loop
+    [~, sortedPulseAmpsIdx] = sort(pulseAmps);
+    finalOutputs = NaN(1, length(refs));
+    
+    inputsLines = [];
+    for j=sortedPulseAmpsIdx
+        % Create animated line handlers with corresponding colors
+        
+        inputLines = [];
+        for jj=1:length(refs)
+            if jj==j
+                inputLine = animatedline(axesHandlers(jj), 'Color', selectedColor);
+            else
+                inputLine = animatedline(axesHandlers(jj), 'Color', neightbourColor);
+            end
+            inputLines = [inputLines, inputLine];
+        end
+        inputsLines = inputs
+        
+        % Generate input signal and applies it
+        inputSignal = generateSignal(pulseAmps(j), inputSamples);
+        for i=1:inputSamples
+            preisachArray(j).updateRelays(inputSignal(i));
+            output = preisachArray(j).getOutput();
+            addpoints(inputLines(j), inputSignal(i), output)
+            
+            coupledInput = coupligFactor*inputSignal(i);
+            for jj=1:length(refs)
+                if jj==j, continue, end
+                preisachArray(jj).updateRelays(coupledInput);
+                neightbourOutput = preisachArray(jj).getOutput();
+                addpoints(inputLines(jj), coupledInput, neightbourOutput)
+            end
+            
+            drawnow limitrate;
+        end
+        finalOutputs(j) = output;
+    end
+    
+    % Compute and print errors
+    errors = (refs - finalOutputs);
+    disp(['Remnant:   ', num2str(finalOutputs, '   %+6.6f')])
+    disp(['Error:     ', num2str(errors, '   %+6.6f')])
+    if max(abs(errors))<=errorThreshold
+        disp('-------------------------')
+        disp('Error threshold achieved')
+        disp('-------------------------')
+        break
+    end
+    
+    % Clear previous reset
+    for j=1:length(refs), clearpoints(resetLines(j)); end
+    
+    % Compute pulses amps for next iteration and update iteration counter
+    pulseAmps = pulseAmps + K0*errors;
+    pulseAmps = max(min(pulseAmps', pulseAmpMax), pulseAmpMin)';
+    iteration = iteration + 1;
+end
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+% Function to generate reset signal
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+function [ampVals, timeVals] = generateSignal(amp, numSamples)
+    timePoints = [0; 0.25; 0.5; 0.75];
+    ampPoints = [0; amp; 0; 0];
+    timeVals = linspace(0, timePoints(end), numSamples);
+    ampVals = interp1(timePoints, ampPoints, timeVals);
+    timeVals = timeVals(:);
+    ampVals = ampVals(:);
+end

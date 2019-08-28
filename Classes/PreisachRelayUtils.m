@@ -8,11 +8,11 @@ classdef PreisachRelayUtils < handle
             obj.preisachRelayModel = preisachRelayModel;
         end
         
-        %Applies and input to the Preisach operator and returns the
+        %Applies an input to the Preisach operator and returns the
         %corresponding output and relays sequence
         %The filtereing operation means that if the
         %exact same state of all relays in the Preisach plane is generated
-        %more than once, the corresponding output are averaged
+        %more than once, the corresponding outputs are averaged
         function [filteredInputSeq, filteredOutputSeq, filteredRelaysSeq] = filterSequences(obj, inputSeq, outputSeq)
             inputSeq = inputSeq(:);
             outputSeq = outputSeq(:);
@@ -70,7 +70,7 @@ classdef PreisachRelayUtils < handle
             % Generating filtered sequences
             filterTic = tic;
             obj.preisachRelayModel.resetRelaysOff();
-            [filteredInputSeq, filteredOutputSeq, filteredRelaysSeq] = ...
+            [~, filteredOutputSeq, filteredRelaysSeq] = ...
                 obj.filterSequences(inputSeq, outputSeq);
             P = [obj.buildRelaysMatrix(filteredRelaysSeq)*obj.preisachRelayModel.relayArea,...
                 ones(size(filteredRelaysSeq,3),1)];
