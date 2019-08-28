@@ -1,4 +1,4 @@
-classdef MeasurementClass
+classdef MeasurementData < matlab.mixin.SetGet
     properties
         timestamp
         sampleName
@@ -9,9 +9,5 @@ classdef MeasurementClass
         strain
         current
         voltage
-    end
-    
-    methods
-        
     end
 end

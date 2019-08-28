@@ -5,77 +5,61 @@ clc
 for i=1:length(measurements), disp(measurements(i).sampleName), end
 
 % Name of measurement to plot
-fullName = 'RMN_1200V_600V';
-% fullName = 'RMN_1200V_200V_100V';
+fullName = 'RMN_1400V_500V_600V';
+
 for i=1:length(measurements)
     if strcmp(measurements(i).sampleName, fullName)>0 && ...
-        strcmp(measurements(i).waveform, 'Manual1')>0 
+        strcmp(measurements(i).waveform, 'ManualWaveform: 1')>0 
         
         % Print measurement
         disp('----------------------------------------')
         disp(horzcat('Plotting Measurement ', num2str(i), ': '))
         disp(measurements(i))
     
-        % Find and add voltage offset and initial strain
-%         idx = find(measurements(i).time>=2.75 & measurements(i).time<=3.0, ...
-%             1, 'first');
+        % Find voltage and strain after initialization
         idx = find(measurements(i).time>=2.75 & measurements(i).time<=3.0);
-        voltageOffset = mean(measurements(i).voltage(idx));
-        strainOffset = mean(measurements(i).strain(idx));
-%         voltageOffset = 0;
-%         strainOffset = 0;
-        finalIdx = find(measurements(i).time>=4.25 & measurements(i).time<=4.5, 1, 'last');
+        afterInitVoltage = mean(measurements(i).voltage(idx));
+        afterInitStrain = mean(measurements(i).strain(idx));
+%         endIdx = find(measurements(i).time>=4.25 & measurements(i).time<=4.5, 1, 'last');
+        endIdx = length(measurements(i).time);
         
         % Strain vs Time plot
-        figure
-        plot(measurements(i).time(1:finalIdx), ...
-            measurements(i).strain(1:finalIdx) - strainOffset)
-                xlabel('Time (s)')
-        title(horzcat('Measurement ', num2str(i), ': ', ...
-            measurements(i).sampleName, ...
-            ' [', measurements(i).error, ']'), ...
-            'interpreter', 'none')
+        figure; grid on; hold on;
+        plot(measurements(i).time(1:endIdx), ...
+            measurements(i).strain(1:endIdx) - afterInitStrain)
+        xlabel('Time (s)')
         ylabel('Deformation (nm)')
-        grid on
+        title(horzcat('Measurement ', num2str(i), ': ', ...
+                        measurements(i).sampleName, ...
+                        ' [', measurements(i).error, ']'), ...
+                        'interpreter', 'none')
         
         % Voltage vs Time plot
-        figure
-        plot(measurements(i).time(1:finalIdx), ...
-            measurements(i).voltage(1:finalIdx) - voltageOffset)
-        title(horzcat('Measurement ', num2str(i), ': ', ...
-            measurements(i).sampleName, ...
-            ' [', measurements(i).error, ']'), ...
-            'interpreter', 'none')
+        figure; grid on; hold on;
+        plot(measurements(i).time(1:endIdx), ...
+            measurements(i).voltage(1:endIdx) - afterInitVoltage)
         xlabel('Time (s)')
         ylabel('Voltage (V)')
-        grid on
+        title(horzcat('Measurement ', num2str(i), ': ', ...
+                        measurements(i).sampleName, ...
+                        ' [', measurements(i).error, ']'), ...
+                        'interpreter', 'none')
         
         % Voltage vs Strain plot
-        figure
-        plot(measurements(i).voltage(1:finalIdx) - voltageOffset, ...
-            measurements(i).strain(1:finalIdx) - strainOffset)
-        title(horzcat('Measurement ', num2str(i), ': ', ...
-            measurements(i).sampleName, ...
-            ' [', measurements(i).error, ']'), ...
-            'interpreter', 'none')
+        figure; grid on; hold on;
+        plot(measurements(i).voltage(1:endIdx) - afterInitVoltage, ...
+            measurements(i).strain(1:endIdx) - afterInitStrain)
         xlabel('Voltage (V)')
         ylabel('Deformation (nm)')
-        
-        % Creep strain vs Time plot
-%         figure
-%         idx = find(measurements(i).time>=32.5 ...
-%                 & measurements(i).time<=40, ...
-%                 1, 'first');
-%         plot(measurements(i).time(idx:end), ...
-%             measurements(i).strain(idx:end) - strainOffset)
-%                 xlabel('Time (s)')
-%         ylabel('Deformation (nm)')
-%         grid on
-        
+        title(horzcat('Measurement ', num2str(i), ': ', ...
+                        measurements(i).sampleName, ...
+                        ' [', measurements(i).error, ']'), ...
+                        'interpreter', 'none')
+
         % Create data handler
-        dataHandler = DataHandler(measurements(i).voltage(1:finalIdx) - voltageOffset, ...
-            measurements(i).strain(1:finalIdx) - strainOffset, ...
-            measurements(i).time(1:finalIdx));
+        dataHandler = DataHandler(measurements(i).voltage(1:endIdx) - afterInitVoltage, ...
+            measurements(i).strain(1:endIdx) - afterInitStrain, ...
+            measurements(i).time(1:endIdx));
     end
 end
 
