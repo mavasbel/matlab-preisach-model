@@ -2,7 +2,7 @@ close all
 clc
 
 % Model parameters
-totalPreisachs = 2;
+totalPreisachs = 1;
 couplingFactor = 0.5;
 resetAmp = -1.0;
 pulseAmpMax = 1;
