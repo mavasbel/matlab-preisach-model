@@ -7,8 +7,8 @@ clc
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 inputMin = -1;
 inputMax = 1;
-gridSize = 800;
-sampleLength = 800;
+gridSize = 200;
+sampleLength = 200;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Create weighting function
@@ -79,8 +79,10 @@ preisachUtils = PreisachRelayUtils(preisachRelayModel);
 
 %Generates major loop to compute the necesarry offset and after applying 
 %offset generates the major loop again
-inputSeq = [linspace(inputMin, inputMax, sampleLength), ...
-    linspace(inputMax, inputMin, sampleLength)]';
+factorPos = 1.0;
+factorNeg = 1.0;
+inputSeq = [linspace(inputMin*factorNeg, inputMax*factorPos, sampleLength), ...
+    linspace(inputMax*factorPos, inputMin*factorNeg, sampleLength)]';
 [outputSeq, ~] = preisachUtils.generateOutputSeq(inputSeq);
 dataHandler = DataHandler(inputSeq, outputSeq);
 preisachRelayModel.offset = -dataHandler.outputOffset;

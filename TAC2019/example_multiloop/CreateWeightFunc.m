@@ -7,8 +7,8 @@ clc
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 inputMin = -1;
 inputMax = 1;
-gridSize = 200;
-sampleLength = 200;
+gridSize = 800;
+sampleLength = 800;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Create weighting function
@@ -100,8 +100,8 @@ DataPlotter.plotWeightFunc(preisachRelayModel.weightFunc, preisachRelayModel.inp
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Add rectangles
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-% linePoints = 350;
-% maxZ = max(max(weightFunc));
+linePoints = 350;
+maxZ = max(max(weightFunc));
 
 % inputCross= -0.5;
 % inputCross= 0;
