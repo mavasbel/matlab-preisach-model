@@ -7,8 +7,8 @@ clc
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 inputMin = -1;
 inputMax = 1;
-gridSize = 200;
-sampleLength = 200;
+gridSize = 800;
+sampleLength = 800;
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Create weighting function
@@ -38,9 +38,9 @@ end
 % weightFunc(end-idx+1:end,1:idx) = flipud(weightFunc(end-idx+1:end,1:idx));
 
 % Two loops with same orientation
-idx = find(xVals>=0,1,'first');
-weightFunc(1:end-idx,1:idx) = -1*weightFunc(1:end-idx,1:idx);
-weightFunc(end-idx+1:end,1:idx) = fliplr(weightFunc(end-idx+1:end,1:idx));
+% idx = find(xVals>=0,1,'first');
+% weightFunc(1:end-idx,1:idx) = -1*weightFunc(1:end-idx,1:idx);
+% weightFunc(end-idx+1:end,1:idx) = fliplr(weightFunc(end-idx+1:end,1:idx));
 
 % weightFunc(end-idx+1:end,1:idx) = flipud(weightFunc(end-idx+1:end,1:idx));
 % weightFunc(end-idx+1:end,1:idx) = fliplr(weightFunc(end-idx+1:end,1:idx));
@@ -79,10 +79,8 @@ preisachUtils = PreisachRelayUtils(preisachRelayModel);
 
 %Generates major loop to compute the necesarry offset and after applying 
 %offset generates the major loop again
-factorPos = 1.0;
-factorNeg = 1.0;
-inputSeq = [linspace(inputMin*factorNeg, inputMax*factorPos, sampleLength), ...
-    linspace(inputMax*factorPos, inputMin*factorNeg, sampleLength)]';
+inputSeq = [linspace(inputMin, inputMax, sampleLength), ...
+    linspace(inputMax, inputMin, sampleLength)]';
 [outputSeq, ~] = preisachUtils.generateOutputSeq(inputSeq);
 dataHandler = DataHandler(inputSeq, outputSeq);
 preisachRelayModel.offset = -dataHandler.outputOffset;
@@ -108,6 +106,8 @@ DataPlotter.plotInputPeriod(dataHandler);
 DataPlotter.plotOutputPeriod(dataHandler);
 DataPlotter.plotLoopPeriod(dataHandler);
 DataPlotter.plotWeightFunc(preisachRelayModel.weightFunc, preisachRelayModel.inputGrid);
+drawnow;
+saveas(gcf,'example_butterfly_mu','epsc');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Creating parameters for simulation
@@ -119,13 +119,15 @@ DataPlotter.plotWeightFunc(preisachRelayModel.weightFunc, preisachRelayModel.inp
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 linePoints = 350;
 maxZ = max(max(weightFunc));
-
+ 
 inputCross= 0;
 plotRectangle([inputMin, inputCross;
     inputCross, inputCross;
     inputCross, inputMax;
     inputMin, inputMax;
     inputMin, inputCross], maxZ, linePoints);
+drawnow;
+saveas(gcf,'example_butterfly_mu_omegac','epsc');
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Functions

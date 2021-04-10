@@ -7,15 +7,15 @@ if (~exist('isBatch', 'var') || isBatch ~= true) clc; end
 dataHandler.resetOrigSequences();
 % dataHandler.trimFirstZeroCrossInput();
 % dataHandler.trimFirstMaxLastMinInput();
-% dataHandler.trimFirstSecondMaxInput();
-dataHandler.trimSecondThirdMaxInput();
-dataHandler.interpSequence(401*4);
+dataHandler.trimFirstSecondMaxInput();
+% dataHandler.trimSecondThirdMaxInput();
+dataHandler.interpSequence(401*8);
 dataHandler.printInfo();
 
 inputInterFact = -0.005;
 inputInter = abs(dataHandler.inputMax - dataHandler.inputMin);
 preisachRelayModel = PreisachRelayModel([dataHandler.inputMin-inputInter*inputInterFact, ...
-    dataHandler.inputMax+inputInter*inputInterFact], 200);
+    dataHandler.inputMax+inputInter*inputInterFact], 400);
 preisachRelayModel.printInfo();
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -26,6 +26,7 @@ fitPlotter.subfigInput(1:dataHandler.origSampleLength, dataHandler.origInputSeq,
 fitPlotter.subfigInput(dataHandler.indexesSeq, dataHandler.inputSeq, 'Adjusted Input', 'b');
 fitPlotter.subfigOutput(1:dataHandler.origSampleLength, dataHandler.origOutputSeq, 'Original Output', 'r');
 fitPlotter.subfigOutput(dataHandler.indexesSeq, dataHandler.outputSeq, 'Adjusted Output', 'b');
+drawnow
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % Fitting
@@ -51,8 +52,10 @@ fitPlotter.subfigOutput(dataHandler.indexesSeq, fittedOutputSeq, 'Fitted Output'
 fitPlotter.subfigLoop(dataHandler.inputSeq, dataHandler.outputSeq, 'Real data', 'r');
 fitPlotter.subfigLoop(dataHandler.inputSeq, fittedOutputSeq, 'Fitted result', 'b');
 fitPlotter.subfigWeightFunc(preisachRelayModel.weightFunc, preisachRelayModel.inputGrid);
+drawnow
 
 fitPlotter.figWeightFunc(preisachRelayModel.weightFunc, preisachRelayModel.inputGrid);
+drawnow
 
 if (~exist('isBatch', 'var') || isBatch ~= true) run('./CreateSimulinkParams'); end
 
