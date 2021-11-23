@@ -7,15 +7,15 @@ if (~exist('isBatch', 'var') || isBatch ~= true) clc; end
 dataHandler.resetOrigSequences();
 % dataHandler.trimFirstZeroCrossInput();
 % dataHandler.trimFirstMaxLastMinInput();
-dataHandler.trimFirstSecondMaxInput();
-% dataHandler.trimSecondThirdMaxInput();
-dataHandler.interpSequence(401);
+% dataHandler.trimFirstSecondMaxInput();
+dataHandler.trimSecondThirdMaxInput();
+dataHandler.interpSequence(4*401);
 dataHandler.printInfo();
 
-inputInterFact = -0.005;
+inputInterFact = -0.0001;
 inputInter = abs(dataHandler.inputMax - dataHandler.inputMin);
 preisachRelayModel = PreisachRelayModel([dataHandler.inputMin-inputInter*inputInterFact, ...
-    dataHandler.inputMax+inputInter*inputInterFact], 300);
+    dataHandler.inputMax+inputInter*inputInterFact], 400);
 preisachRelayModel.printInfo();
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

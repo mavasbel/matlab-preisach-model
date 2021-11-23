@@ -66,7 +66,7 @@ classdef PreisachRelayUtils < handle
         function [filterTime, fittingTime, weightFuncTime] = fitModel(obj, inputSeq, outputSeq)
             inputSeq = inputSeq(:);
             outputSeq = outputSeq(:);
-            
+
             % Generating filtered sequences
             filterTic = tic;
             obj.preisachRelayModel.resetRelaysOff();
@@ -161,10 +161,26 @@ classdef PreisachRelayUtils < handle
         
         %Computes the approximante inversion
         function weightVector = fitWeights(obj, P, filteredOutputSeq)
-            gamma = 0.0;
-            % weightVector = ( P'*P + gamma*eye(size(P,2)) ) \ P'*filteredOutputSeq;
-            weightVector = P'*( (P*P' + gamma*eye(size(P,1)) ) \ filteredOutputSeq );
-            % weightVector = svdApproxInverse(P, filteredOutputSeq, gridSize);
+%             cornSizeFact = 0.075;            
+%             maskSize = floor(obj.preisachRelayModel.gridSize*cornSizeFact);
+%             maskCorner = fliplr(triu(ones(maskSize, maskSize)));
+%             maskUp = zeros(obj.preisachRelayModel.gridSize,obj.preisachRelayModel.gridSize);
+%             maskUp(1:maskSize, end-maskSize+1:end) = maskCorner;
+%             maskDown = zeros(obj.preisachRelayModel.gridSize,obj.preisachRelayModel.gridSize);
+%             maskDown(end-maskSize+1:end, 1:maskSize) = maskCorner;
+            
+%             P(end+1,:) = 1*[obj.buildRelaysMatrix(maskUp),zeros(1,1)];
+%             P(end+1,:) = 1*[obj.buildRelaysMatrix(maskDown),zeros(1,1)];
+%             filteredOutputSeq(end+1) = 0;
+%             filteredOutputSeq(end+1) = 0;
+%             regVec = [obj.buildRelaysMatrix(maskUp+maskDown),0];
+
+            gamma1 = 0.1;
+%             gamma2 = 50.0;
+%             weightVector = ( P'*P + gamma1*eye(size(P,2)) ) \ P'*filteredOutputSeq;
+%             weightVector = ( P'*P + gamma1*(eye(size(P,2))-diag(regVec(:))) + gamma2*diag(regVec(:)) ) \ P'*filteredOutputSeq;
+            weightVector = P'*( (P*P' + gamma1*eye(size(P,1)) ) \ filteredOutputSeq );
+%             weightVector = obj.svdApproxInverse(P, filteredOutputSeq);
         end
         
     end

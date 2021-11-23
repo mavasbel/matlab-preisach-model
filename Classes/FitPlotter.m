@@ -146,13 +146,14 @@ classdef FitPlotter < handle
             
             stdDevColorFactor = 2.2;    
             avgColorFactor = 3.5;
+            minMaxLookUpFac = 0.1;
 
-            posMu = max(weightFunc,0);
+            posMu = max(weightFunc(gridLength*minMaxLookUpFac:end-gridLength*minMaxLookUpFac,gridLength*minMaxLookUpFac:end-gridLength*minMaxLookUpFac),0);
             posNnz = nnz(posMu);
             posAvg = sum(sum(posMu))/posNnz;
             posOnes = spones(posMu);
             posStdDev = sqrt(sum(sum( (posMu - posAvg.*posOnes).^2 ))/posNnz);  
-            negMu = min(weightFunc,0);
+            negMu = min(weightFunc(gridLength*minMaxLookUpFac:end-gridLength*minMaxLookUpFac,gridLength*minMaxLookUpFac:end-gridLength*minMaxLookUpFac),0);
             negNnz = nnz(negMu);
             negAvg = sum(sum(negMu))/negNnz;
             negOnes = spones(negMu);
@@ -219,13 +220,14 @@ classdef FitPlotter < handle
             
             stdDevColorFactor = 2.2;    
             avgColorFactor = 3.5;
+            minMaxLookUpFac = 0.1;
 
-            posMu = max(weightFunc,0);
+            posMu = max(weightFunc(gridLength*minMaxLookUpFac:end-gridLength*minMaxLookUpFac,gridLength*minMaxLookUpFac:end-gridLength*minMaxLookUpFac),0);
             posNnz = nnz(posMu);
             posAvg = sum(sum(posMu))/posNnz;
             posOnes = spones(posMu);
             posStdDev = sqrt(sum(sum( (posMu - posAvg.*posOnes).^2 ))/posNnz);  
-            negMu = min(weightFunc,0);
+            negMu = min(weightFunc(gridLength*minMaxLookUpFac:end-gridLength*minMaxLookUpFac,gridLength*minMaxLookUpFac:end-gridLength*minMaxLookUpFac),0);
             negNnz = nnz(negMu);
             negAvg = sum(sum(negMu))/negNnz;
             negOnes = spones(negMu);
