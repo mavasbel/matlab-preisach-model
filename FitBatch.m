@@ -34,6 +34,7 @@ skipFilter = '';
 % skipFilter = '.*(uni).*';
 
 % CDC 2020
+% fitMatchFilter = 'PNZT_x0.47_.*x3';
 fitMatchFilter = 'PNZT_x0.47_.*x3.*1400V';
 
 % Anja's plot
@@ -68,6 +69,8 @@ for fhCount=1:length(fitFileHandlers)
 %     saveas(fitPlotter.loopPlaneFig  , strcat(cd, "\Fitting results\LoopPlane-"  , fitFileHandlers(fhCount).fileName, ".png") );
 %     saveas(fitPlotter.inputOutputFig, strcat(cd, "\Fitting results\InputOutput-", fitFileHandlers(fhCount).fileName, ".png") );    
 %     saveas(fitPlotter.loopPlaneFig  , strcat("G:\My Drive\PhD\MATLAB\Hysteresis\Results\Experimental Data\PNZT loops_dif_concentrations\Fitting results\LoopPlane-"  , fitFileHandlers(fhCount).fileName, ".png") );
-%     saveas(fitPlotter.inputOutputFig, strcat("G:\My Drive\PhD\MATLAB\Hysteresis\Results\Experimental Data\PNZT loops_dif_concentrations\Fitting results\InputOutput-", fitFileHandlers(fhCount).fileName, ".png") );
+%     saveas(fitPlotter.inputOutputFig, strcat("G:\My Drive\PhD\MATLAB\Hysteresis\Results\Experimental Data\PNZT loops_dif_concentrations\Fitting results\InputOutput-", fitFileHandlers(fhCount).fileName, ".png") );    
+%     saveas(fitPlotter.loopFig  , strcat("G:\My Drive\PhD\MATLAB\Hysteresis\Results\Experimental Data\PNZT loops_dif_concentrations\Fitting results\LoopPlane3x-"  , fitFileHandlers(fhCount).fileName, ".png") );
+%     saveas(fitPlotter.inputOutputFig, strcat("G:\My Drive\PhD\MATLAB\Hysteresis\Results\Experimental Data\PNZT loops_dif_concentrations\Fitting results\InputOutput3x-", fitFileHandlers(fhCount).fileName, ".png") );
 end
 isBatch = false;

@@ -33,25 +33,27 @@ for i=1:length(measurements)
         figure(); grid on; hold on;
         plot(measurements(i).time(1:endIdx), ...
             measurements(i).strain(1:endIdx) - afterInitStrain, ...
+            '-b','LineWidth',1.25, ...
             'DisplayName', horzcat('Measurement ', num2str(i), ': ', ...
                                 measurements(i).sampleName, ...
                                 ' [', measurements(i).error, ']') )
-        xlabel('Time (s)')
-        ylabel('Deformation (nm)')
-        legend('interpreter', 'none')
-%         xlim([0,7])
+        xlabel('Time ($s$)', 'interpreter', 'latex')
+        ylabel('Strain ($nm$)', 'interpreter', 'latex')
+        legend('interpreter', 'none', 'visible', 'off')
+        xlim([0,6])
         
         % Voltage vs Time plot
         figure(); grid on; hold on;
         plot(measurements(i).time(1:endIdx), ...
             measurements(i).voltage(1:endIdx) - afterInitVoltage, ...
+            '-b','LineWidth',1.25, ...
             'DisplayName', horzcat('Measurement ', num2str(i), ': ', ...
                                 measurements(i).sampleName, ...
                                 ' [', measurements(i).error, ']') )
-        xlabel('Time (s)')
-        ylabel('Voltage (V)')
-        legend('interpreter', 'none')
-%         xlim([0,7])
+        xlabel('Time ($s$)', 'interpreter', 'latex')
+        ylabel('Voltage ($V$)', 'interpreter', 'latex')
+        legend('interpreter', 'none', 'visible', 'off')
+        xlim([0,6])
         
         % Voltage vs Strain plot
         figure(); grid on; hold on;
@@ -60,8 +62,8 @@ for i=1:length(measurements)
             'DisplayName', horzcat('Measurement ', num2str(i), ': ', ...
                                 measurements(i).sampleName, ...
                                 ' [', measurements(i).error, ']') )
-        xlabel('Voltage (V)')
-        ylabel('Deformation (nm)')
+        xlabel('Voltage ($V$)', 'interpreter', 'latex')
+        ylabel('Strain ($nm$)', 'interpreter', 'latex')
         legend('interpreter', 'none')
         
         % Create data handler

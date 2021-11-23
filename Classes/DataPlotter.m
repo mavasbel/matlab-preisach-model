@@ -30,13 +30,14 @@ classdef DataPlotter < handle
             set(plotHandler1,'linestyle','-');
             set(plotHandler2,'linestyle','--');
 
-            legend('u(t) | T_1 \leq t < T_2','u(t) | T_2 \leq t < T_3');
-            xlabel('t','fontsize',11);
-            ylabel('u(t)','fontsize',11,'Rotation',0,'Position',[-T3*0.30 0 0]);
+            legend('$u(t) | T_1 \leq t < T_2$','$u(t) | T_2 \leq t < T_3$');
+            xlabel('$t$','fontsize',11);
+%             ylabel('u(t)','fontsize',11,'Rotation',0,'Position',[-T3*0.30 0 0]);
+            ylabel('$u$','fontsize',11);
             set(gca,'XTick',[T1,T2,T3],...
-                'XTickLabel',{'T_1','T_2','T_1 + T'},'fontsize',10);
+                'XTickLabel',{'$T_1$','$T_2$','$T_1 + T$'},'fontsize',10);
             set(gca,'YTick',[dataHandler.inputMin,dataHandler.inputMax],...
-                'YTickLabel',{'u_{min}','u_{max}'},'fontsize',10);
+                'YTickLabel',{'$u_{min}$','$u_{max}$'},'fontsize',10);
  
             axis([T1-T3*0.2,...
                 T3+T3*0.2,...
@@ -70,11 +71,13 @@ classdef DataPlotter < handle
             set(plotHandler1,'linestyle','-');
             set(plotHandler2,'linestyle','--');
 
-            legend('\Phi(t) | T_1 \leq t < T_2','\Phi(t) | T_2 \leq t < T_3');
-            xlabel('t','fontsize',11);
-            ylabel('\Phi(t)','fontsize',11,'Rotation',0,'Position',[-T3*0.30 0 0]);
+%             legend('\Phi(t) | T_1 \leq t < T_2','\Phi(t) | T_2 \leq t < T_3');
+            legend('$[\mathcal{P}(u,L_0))](t) | T_1 \leq t < T_2$','$[\mathcal{P}(u,L_0))](t) | T_2 \leq t < T_3$');
+            xlabel('$t$','fontsize',11);
+%             ylabel('\Phi(t)','fontsize',11,'Rotation',0,'Position',[-T3*0.30 0 0]);
+            ylabel('$\mathcal{P}(u,L_0)$','fontsize',11);
             set(gca,'XTick',[T1,T2,T3],...
-                'XTickLabel',{'T_1','T_2','T_1 + T'},'fontsize',10);
+                'XTickLabel',{'$T_1$','$T_2$','$T_1 + T$'},'fontsize',10);
             set(gca,'YTick',[],'YTickLabel',{},'fontsize',10);
             
             axis([T1-T3*0.2,...
@@ -110,12 +113,15 @@ classdef DataPlotter < handle
             set(plotHandler2,'linestyle','--');
 
             
-            legend('\Phi(t) | T_1 \leq t < T_2','\Phi(t) | T_2 \leq t < T_3');
-            xlabel('u(t)','fontsize',11);
-            ylabel('\Phi(t)','fontsize',11,'Rotation',0,'Position',...
-                [1.125*(dataHandler.inputMin-0.2*dataHandler.inputAmp) 0 0]);
+%             legend('\Phi(t) | T_1 \leq t < T_2','\Phi(t) | T_2 \leq t < T_3');
+            legend('$[\mathcal{P}(u,L_0)](t) | T_1 \leq t < T_2$','$[\mathcal{P}(u,L_0))](t) | T_2 \leq t < T_3$');
+%             xlabel('u(t)','fontsize',11);
+            xlabel('$u$','fontsize',11);
+            ylabel('$\mathcal{P}(u,L_0)$','fontsize',11);
+%             ylabel('\Phi(t)','fontsize',11,'Rotation',0,'Position',...
+%                 [1.125*(dataHandler.inputMin-0.2*dataHandler.inputAmp) 0 0]);
             set(gca,'XTick',[dataHandler.inputMin,dataHandler.inputMax],...
-                'XTickLabel',{'u_{min}','u_{max}'},'fontsize',10);
+                'XTickLabel',{'$u_{min}$','$u_{max}$'},'fontsize',10);
             set(gca,'YTick',[],'YTickLabel',{},'fontsize',10);
             
             axis([dataHandler.inputMin-0.2*dataHandler.inputAmp,...

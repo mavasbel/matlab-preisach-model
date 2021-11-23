@@ -12,8 +12,8 @@ plot(xt.Time,xt.Data(:,2), 'linewidth', lw, 'linestyle', '-')
 plot(xt.Time,xt.Data(:,3), 'linewidth', lw, 'linestyle', '-')
 set(get(gca,'XAxis'),'FontSize', 14);
 set(get(gca,'YAxis'),'FontSize', 14);
-xlabel('t','fontsize',16);
-legend({'x_1(t)', 'x_2(t)', 'x_3(t)'},'fontsize',16)
+xlabel('$t$','fontsize',16);
+legend({'$x_1(t)$', '$x_2(t)$', '$x_3(t)$'},'fontsize',16)
 xlim([0,8])
 
 figure
@@ -35,7 +35,8 @@ plot(Phiu.Data(1),Phiy.Data(1),'ob','linewidth',lw,'markersize',10)
 plot(Phiu.Data(end),Phiy.Data(end),'xb','linewidth',lw,'markersize',14)
 set(get(gca,'XAxis'),'FontSize', 14);
 set(get(gca,'YAxis'),'FontSize', 14);
-xlabel('u','fontsize',16);
-ylabel('\Phi(u)','Rotation',0,'fontsize',16);
+xlabel('$u$','fontsize',16);
+% ylabel('\Phi(u)','Rotation',0,'fontsize',16);
+ylabel('$\mathcal{P}(u,L_0)$','fontsize',16);
 xlim([-1.1,1.1])
 ylim([-1 1])
