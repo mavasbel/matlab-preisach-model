@@ -10,7 +10,8 @@ clc
 % reachableMax = -0.34;
 % reachableMin = -0.83;
 
-totalPreisachs = 3;
+% totalPreisachs = 3;
+totalPreisachs = 4;
 couplingFactor = 0.50;
 resetAmp = inputMin;
 pulseAmpMax = inputMax;
@@ -22,9 +23,11 @@ reachableMin = -200;
 % Control objective and initial pulse amp
 refs = rand(1,totalPreisachs)*(reachableMax - reachableMin) + reachableMin;
 pulseAmps = rand(1,totalPreisachs)*(pulseAmpMax - pulseAmpMin) + pulseAmpMin;
-refs = [+140 70 +280];
+% refs = [+140 70 +280];
 refs = [+220 100 +380];
+refs = [+150 300 +250 +330];
 pulseAmps = 800*[1,1,1];
+pulseAmps = 800*[1,1,1,1];
 
 % Control paremeters
 K0 = 0.28;

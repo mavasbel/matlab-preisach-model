@@ -1,7 +1,7 @@
 close all
 
 % iters = iteration;
-iters = 16;
+iters = 18;
 
 totalSampleSeries = iters*inputSamples*(totalPreisachs)%+1);
 xLinVals = 1:totalSampleSeries;
@@ -77,11 +77,11 @@ for ii=1:totalPreisachs
         
     xticks(ticksVals);
     xticklabels(ticksLabels);
-    ylabel(strcat('$u_{',string(ii),',\gamma}$'),...
+    ylabel(strcat('$u_{',string(ii),',\varsigma}$'),...
         'FontSize',fontSize,...
         'Interpreter','Latex');
     xlim([1,totalSampleSeries+inputSamples*2]);
-    ylim([-900 1500]);
+    ylim([-200 1500]);
     
     
     
@@ -113,11 +113,11 @@ for ii=1:totalPreisachs
     xticks(ticksVals);
     xticklabels(ticksLabels);
     ylabel(strcat('$\mathcal{P}_',string(ii),...
-            '(u_{',string(ii),',\gamma},I{',string(ii),',0})$'),...
+            '(u_{',string(ii),',\varsigma},I_{',string(ii),',0})$'),...
         'FontSize',fontSize,...
         'Interpreter','Latex');
     xlim([1,totalSampleSeries+inputSamples*2]);
-    ylim([-300 1100]);
+    ylim([-200 800]);
     
     
     
@@ -145,5 +145,5 @@ for ii=1:totalPreisachs
         'Interpreter','Latex');
     
     drawnow
-    saveas(gcf,strcat('simulation_actuator_',string(ii)),'epsc');
+    saveas(gcf,strcat('simulation_actuator_',string(ii),'_thesis'),'epsc');
 end

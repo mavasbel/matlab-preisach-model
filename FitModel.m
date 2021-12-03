@@ -15,7 +15,7 @@ dataHandler.printInfo();
 inputInterFact = -0.0001;
 inputInter = abs(dataHandler.inputMax - dataHandler.inputMin);
 preisachRelayModel = PreisachRelayModel([dataHandler.inputMin-inputInter*inputInterFact, ...
-    dataHandler.inputMax+inputInter*inputInterFact], 400);
+    dataHandler.inputMax+inputInter*inputInterFact], 500);
 preisachRelayModel.printInfo();
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
