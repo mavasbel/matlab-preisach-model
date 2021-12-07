@@ -9,13 +9,13 @@ dataHandler.resetOrigSequences();
 % dataHandler.trimFirstMaxLastMinInput();
 % dataHandler.trimFirstSecondMaxInput();
 dataHandler.trimSecondThirdMaxInput();
-dataHandler.interpSequence(4*401);
+dataHandler.interpSequence(2*401);
 dataHandler.printInfo();
 
 inputInterFact = -0.0001;
 inputInter = abs(dataHandler.inputMax - dataHandler.inputMin);
 preisachRelayModel = PreisachRelayModel([dataHandler.inputMin-inputInter*inputInterFact, ...
-    dataHandler.inputMax+inputInter*inputInterFact], 500);
+    dataHandler.inputMax+inputInter*inputInterFact], 300);
 preisachRelayModel.printInfo();
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%

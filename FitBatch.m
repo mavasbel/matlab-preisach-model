@@ -63,7 +63,7 @@ fitFileHandlers = FileHandler.lookForFiles(lookupPaths, fitMatchFilter, skipFilt
 for fhCount=1:length(fitFileHandlers)
     disp('---------------------------------------------------------------');
     fitFileHandlers(fhCount).printInfo();
-    dataHandler = fitFileHandlers(fhCount).getDataHandler();
+    dataHandler = fitFileHandlers(fhCount).getStrainDataHandler();
 
     run('./FitModel');
 %     saveas(fitPlotter.loopPlaneFig  , strcat(cd, "\Fitting results\LoopPlane-"  , fitFileHandlers(fhCount).fileName, ".png") );
